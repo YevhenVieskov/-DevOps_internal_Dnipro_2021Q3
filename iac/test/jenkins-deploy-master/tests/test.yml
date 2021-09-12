@@ -1,0 +1,21 @@
+---
+- hosts: all
+  name: Set up Jenkins
+  pre_tasks:
+    - set_fact:
+        jenkins_external_hostname: "{{ inventory_hostname }}"
+  roles:
+    # needs to match repository name; when the role is included normally, it will be `gsa.jenkins`
+    - jenkins-deploy
+  tasks:
+
+    - name: Install jenkins_job dependencies
+      yum:
+        name: python-lxml
+
+    - name: Set up pipeline
+      jenkins_job:
+        config: "{{ lookup('file', 'files/job.xml') }}"
+        name: test-auto
+        user: "{{ jenkins_admin_username }}"
+        password: "{{ jenkins_admin_password }}"

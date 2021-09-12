@@ -1,0 +1,98 @@
+---
+- name: Enable Extras repo for ansible
+  ini_file:
+    dest: /etc/yum.repos.d/redhat-rhui.repo
+    section: rhui-REGION-rhel-server-extras
+    option: enabled
+    value: 1
+
+- name: Set yum repo for AWSCLI
+  ini_file:
+    dest: /etc/yum.repos.d/redhat-rhui.repo
+    section: rhui-REGION-rhel-server-optional
+    option: enabled
+    value: 1
+
+- name: Install dependencies
+  yum:
+    name:
+      - ansible
+      - awscli
+      - git
+      - python2-pip
+      # need latest versions for installing Jenkins plugins - otherwise get a certificate error
+      - ca-certificates
+      - python
+      - docker
+    state: latest
+
+- name: Create a docker group
+  group:
+    name: docker
+    state: present
+
+- name: Add the jenkins user to the docker group
+  user:
+    name: jenkins
+    groups: docker
+    state: present
+    append: yes
+
+- name: Docker setup-set docker to start on boot
+  command: systemctl enable docker
+  become: true
+  become_user: root
+  become_method: sudo
+
+- name: Docker setup-restart jenkins
+  command: systemctl restart docker
+  become: true
+  become_user: root
+  become_method: sudo
+  
+- name: Install dependencies for Jenkins modules
+  pip:
+    name: python-jenkins
+
+# We handle the plugin installation ourselves, so that we can support appending to the default list. Code pulled from
+# https://github.com/geerlingguy/ansible-role-jenkins/pull/119
+- name: Install Jenkins plugins
+  jenkins_plugin:
+    name: "{{ item }}"
+    params:
+      url_username: "{{ jenkins_admin_username }}"
+    url_password: "{{ jenkins_admin_password }}"
+    url: http://{{ jenkins_hostname }}:{{ jenkins_http_port }}{{ jenkins_url_prefix }}
+    # some of the plugins are large, so give them extra time
+    timeout: 90
+  with_items: "{{ jenkins_plugins + additional_jenkins_plugins }}"
+  notify: restart jenkins
+
+- name: Restart Jenkins, if necessary
+  meta: flush_handlers
+
+# http://stackoverflow.com/a/34522653/358804
+- name: Wait for Jenkins to be available
+  uri:
+    url: http://{{ jenkins_hostname }}:{{ jenkins_http_port }}{{ jenkins_url_prefix }}{{ jenkins_health_check_path }}
+    return_content: true
+  register: jenkins_req
+  until: jenkins_req.status == 200
+  retries: 60
+  delay: 1
+
+- name: Fail if Jenkins not available
+  fail:
+  when: "'Jenkins' not in jenkins_req.content"
+
+- import_tasks: nginx.yml
+- import_tasks: logging.yml
+- import_tasks: ssh.yml
+
+- name: Install terraform
+  include_role:
+    name: mauromedda.ansible_role_terraform
+
+- name: Install terragrunt
+  include_role:
+    name: mauromedda.ansible_role_terragrunt
