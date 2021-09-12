@@ -1,0 +1,8 @@
+.idea
+*.tfstate
+*.tfstate.backup
+*.tfstate.*
+*.terraform
+*.zip
+*.retry
+inventory-*

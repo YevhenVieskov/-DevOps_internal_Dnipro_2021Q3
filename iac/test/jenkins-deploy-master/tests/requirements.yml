@@ -1,0 +1,8 @@
+---
+# gsa.jenkins role dependencies, which should match what's in `dependencies` list of `../meta/main.yml`.
+- src: geerlingguy.jenkins
+- src: srsp.oracle-java
+- src: https://github.com/GSA/ansible-https-proxy
+  name: gsa.https-proxy
+- src: mauromedda.ansible_role_terraform
+- src: mauromedda.ansible_role_terragrunt
