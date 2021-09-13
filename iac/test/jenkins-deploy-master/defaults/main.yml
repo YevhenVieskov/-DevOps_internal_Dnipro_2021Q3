@@ -1,0 +1,34 @@
+---
+jenkins_audit_file_path: /var/log/jenkins/audit.log.0
+# the homepage may not be accessible if anonymous users don't have read permissions, so check the login page
+jenkins_health_check_path: /login
+
+jenkins_ssh_user: jenkins
+
+### Plugins ###
+
+# For more information on each plugin, visit
+#
+#   https://plugins.jenkins.io/<ID>
+#
+# Note that removing items from this list won't uninstall them.
+jenkins_plugins:
+  - ansible
+  - ansicolor
+  - audit-trail
+  - blueocean
+  - github
+  - pipeline-utility-steps
+  - role-strategy
+  - ssh-agent
+  - timestamper
+  - workflow-aggregator
+  - ws-cleanup
+  - saml
+  - periodicbackup
+  - aws-credentials
+  - packer
+  - docker
+
+# Use this variable if you want to append to the recommended `jenkins_plugins` above.
+additional_jenkins_plugins: []
