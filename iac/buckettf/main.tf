@@ -1,29 +1,12 @@
 terraform {
   required_providers {
     aws = {
-      source  = "hashicorp/aws"
-      #version = "= 3.27"
+      source  = "hashicorp/aws"      
       version = "~> 3.57"
     }
   }
-
-  #required_version = "= 0.12.25"
-  #required_version = "= 0.14"
+  
   required_version = ">= 1.0.4"
-}
-
-#variables
-
-variable "profile" {
-  description = "AWS Profile"
-  type        = string
-  default     = "vieskovtf"
-}
-
-variable "region" {
-  description = "Region for AWS resources"
-  type        = string
-  default     = "us-east-2"
 }
 
 #servers
@@ -31,6 +14,125 @@ variable "region" {
 provider "aws" {
   profile = var.profile
   region  = var.region
+}
+
+
+resource "aws_s3_bucket" "terraform_state_storage" {
+  bucket = var.storage_bucket_name
+  acl    = "private"
+
+  tags = {
+    name      = "Terraform Storage"
+    dedicated = "Infrastructure"
+  }
+
+  versioning {
+    enabled = true
+  }
+
+  # Enable server-side encryption by default
+  server_side_encryption_configuration {
+    rule {
+      apply_server_side_encryption_by_default {
+        sse_algorithm = "AES256"
+      }
+    }
+  }
+
+  lifecycle {
+    prevent_destroy = true
+  }
+}
+
+# create a dynamodb table for locking the state file.
+# this is important when sharing the same state file across users
+resource "aws_dynamodb_table" "terraform_state_lock" {
+  name           = var.storage_bucket_name
+  hash_key       = "LockID"
+  read_capacity  = 20
+  write_capacity = 20
+
+  attribute {
+    name = "LockID"
+    type = "S"
+  }
+
+  tags = {
+    name = "DynamoDB Terraform State Lock Table"
+    dedicated = "Infrastructure"
+  }
+
+  lifecycle {
+    prevent_destroy = true
+  }
+}
+
+data "aws_iam_policy_document" "terraform_storage_state_access" {
+  statement  {
+    effect = "Allow"
+
+    actions = [
+      "s3:ListBucket"
+    ]
+
+    resources = [
+      aws_s3_bucket.terraform_state_storage.arn
+    ]
+  }
+
+  statement {
+    effect = "Allow"
+
+    actions = [
+      "s3:GetObject",
+      "s3:PutObject"
+    ]
+
+    resources = [
+      "${aws_s3_bucket.terraform_state_storage.arn}/terraform.tfstate"
+    ]
+  }
+}
+
+# Creates the IAM policy to allow access to the bucket
+resource "aws_iam_policy" "terraform_storage_state_access" {
+  name = "terraform_storage_state_access"
+  policy = data.aws_iam_policy_document.terraform_storage_state_access.json
+}
+
+# Assigns the policy to the terraform user
+resource "aws_iam_user_policy_attachment" "terraform_storage_state_attachment" {
+  user       = var.profile
+  policy_arn = aws_iam_policy.terraform_storage_state_access.arn
+}
+
+
+data "aws_iam_policy_document" "dynamodb_access" {
+  statement {
+    effect = "Allow"
+
+    actions = [
+      "dynamodb:GetItem",
+      "dynamodb:PutItem",
+      "dynamodb:DeleteItem"
+    ]
+
+    resources = [
+      "arn:aws:dynamodb:*:*:table/terraform-state-lock"
+    ]
+  }
+}
+
+# Creates the IAM policy to allow access to the dynamoDB
+resource "aws_iam_policy" "dynamodb_access" {
+  name = "dynamodb_access"
+  policy = data.aws_iam_policy_document.dynamodb_access.json
+}
+
+# Assigns the policy to the terraform user
+resource "aws_iam_user_policy_attachment" "dynamodb_attachment" {
+  user       = var.profile #local.terraform_user
+  policy_arn = aws_iam_policy.dynamodb_access.arn
 }
 
 
@@ -228,7 +330,7 @@ output "terraform_state_kms_key_arn" {
   value = "${module.terraform_state.kms_default_key_arn}"
 }*/
 
-Features
+/*Features
 
     Create a S3 bucket to store remote state files.
     Encrypt state files with KMS.
@@ -241,6 +343,8 @@ Features
 Usage
 
 The module outputs terraform_iam_policy which can be attached to IAM users, groups or roles running Terraform. This will allow the entity accessing remote state files and the locking table. This can optionally be disabled with terraform_iam_policy_create = false
+
+*/
 
 /*provider "aws" {
   region = "us-east-1"
@@ -288,4 +392,6 @@ THE_NAME_OF_THE_STATE_BUCKET, THE_ID_OF_THE_DYNAMODB_TABLE and THE_ID_OF_THE_KMS
 
 See the official document for more detail.
 */
+
+
 

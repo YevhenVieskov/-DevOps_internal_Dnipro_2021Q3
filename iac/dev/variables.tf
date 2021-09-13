@@ -1,6 +1,4 @@
-
 #variables
-
 variable "profile" {
   description = "AWS Profile"
   type        = string
@@ -12,5 +10,3 @@ variable "region" {
   type        = string
   default     = "us-east-2"
 }
-
-
