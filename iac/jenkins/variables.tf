@@ -1,9 +1,11 @@
-variable "bucket_name" {
-  description = "The name of the S3 bucket. Must be globally unique."
+variable "profile" {
+  description = "AWS Profile"
   type        = string
+  default     = "vieskovtf"
 }
 
-variable "table_name" {
-  description = "The name of the DynamoDB table. Must be unique in this AWS account."
+variable "region" {
+  description = "Region for AWS resources"
   type        = string
+  default     = "us-east-2"
 }

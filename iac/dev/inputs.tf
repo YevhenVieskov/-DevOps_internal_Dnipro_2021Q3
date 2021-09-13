@@ -148,7 +148,7 @@ variable "db_monitoring_role_name" {
 variable "db_monitoring_role_description" {
   description = "Database monitoring role description"
   type        = string
-  default     = "Description for monitoring role"
+  default     = "example-monitoring-role"
 }
 
 

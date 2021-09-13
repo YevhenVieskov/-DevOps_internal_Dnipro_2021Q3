@@ -1,30 +1,17 @@
 terraform {
   required_providers {
     aws = {
-      source  = "hashicorp/aws"
-      #version = "= 3.27"
+      source  = "hashicorp/aws"      
       version = "~> 3.57"
     }
   }
-
-  #required_version = "= 0.12.25"
-  #required_version = "= 0.14"
+  
   required_version = ">= 1.0.4"
 }
 
 #variables
 
-variable "profile" {
-  description = "AWS Profile"
-  type        = string
-  default     = "vieskovtf"
-}
 
-variable "region" {
-  description = "Region for AWS resources"
-  type        = string
-  default     = "us-east-2"
-}
 
 #servers
 
@@ -33,79 +20,208 @@ provider "aws" {
   region  = var.region
 }
 
-resource "aws_s3_bucket" "terraform_state" {
+module "vpc" {
+  source  = "terraform-aws-modules/vpc/aws"
+  version = "~> 2"
 
-  bucket = var.bucket_name
+  name = local.name
+  cidr = "10.99.0.0/18"
 
-  // This is only here so we can destroy the bucket as part of automated tests. You should not copy this for production
-  // usage
-  force_destroy = true
+  azs              = ["${local.region}a", "${local.region}b", "${local.region}c"]
+  public_subnets   = ["10.99.0.0/24", "10.99.1.0/24", "10.99.2.0/24"]
+  private_subnets  = ["10.99.3.0/24", "10.99.4.0/24", "10.99.5.0/24"]
+  database_subnets = ["10.99.7.0/24", "10.99.8.0/24", "10.99.9.0/24"]
 
-  # Enable versioning so we can see the full revision history of our
-  # state files
-  versioning {
-    enabled = true
-  }
+  create_database_subnet_group = true
 
-  # Enable server-side encryption by default
-  server_side_encryption_configuration {
-    rule {
-      apply_server_side_encryption_by_default {
-        sse_algorithm = "AES256"
-      }
-    }
-  }
+  tags = local.tags
 }
 
-resource "aws_dynamodb_table" "terraform_locks" {
-  name         = var.table_name
-  billing_mode = "PAY_PER_REQUEST"
-  hash_key     = "LockID"
+module "vpc" {
+    source  = "terraform-google-modules/network/google//modules/subnets"
+    version = "~> 2.0.0"
 
-  attribute {
-    name = "LockID"
-    type = "S"
-  }
+    project_id   = "<PROJECT ID>"
+    network_name = "example-vpc"
 
-  tags ={
-    Name = "StateLock"
-  }
-  
-  depends_on = [aws_s3_bucket.terraform_state]
-
-}
-
-
-
-resource "aws_s3_bucket_policy" "terraform_state" {
-  bucket = aws_s3_bucket.terraform_state.id
-
-  # Terraform's "jsonencode" function converts a
-  # Terraform expression's result to valid JSON syntax.
-  policy = jsonencode({
-    "Version": "2012-10-17",
-    "Statement": [
+    subnets = [
         {
-            "Effect": "Allow",
-            "Principal": {
-                "AWS": "arn:aws:sts::052776272001:federated-user/vieskovtf"
-            },
-            "Action": "s3:ListBucket",
-            "Resource": "arn:aws:s3:::vieskovtfstate"
+            subnet_name           = "subnet-01"
+            subnet_ip             = "10.10.10.0/24"
+            subnet_region         = "us-west1"
         },
         {
-            "Effect": "Allow",
-            "Principal": {
-                "AWS": "arn:aws:sts::052776272001:federated-user/vieskovtf"
-            },
-            "Action": [
-                "s3:GetObject",
-                "s3:PutObject"
-            ],
-            "Resource": "arn:aws:s3:::vieskovtfstate/terraform.tfstate"
+            subnet_name           = "subnet-02"
+            subnet_ip             = "10.10.20.0/24"
+            subnet_region         = "us-west1"
+            subnet_private_access = "true"
+            subnet_flow_logs      = "true"
+            description           = "This subnet has a description"
+        },
+        {
+            subnet_name               = "subnet-03"
+            subnet_ip                 = "10.10.30.0/24"
+            subnet_region             = "us-west1"
+            subnet_flow_logs          = "true"
+            subnet_flow_logs_interval = "INTERVAL_10_MIN"
+            subnet_flow_logs_sampling = 0.7
+            subnet_flow_logs_metadata = "INCLUDE_ALL_METADATA"
         }
     ]
-})
 
+    secondary_ranges = {
+        subnet-01 = [
+            {
+                range_name    = "subnet-01-secondary-01"
+                ip_cidr_range = "192.168.64.0/24"
+            },
+        ]
+
+        subnet-02 = []
+    }
 }
 
+
+module "vote_service_sg" {
+  source = "terraform-aws-modules/security-group/aws"
+
+  name        = "user-service"
+  description = "Security group for user-service with custom ports open within VPC, and PostgreSQL publicly open"
+  vpc_id      = "vpc-12345678"
+
+  ingress_cidr_blocks      = ["10.10.0.0/16"]
+  ingress_rules            = ["https-443-tcp"]
+  ingress_with_cidr_blocks = [
+    {
+      from_port   = 8080
+      to_port     = 8090
+      protocol    = "tcp"
+      description = "User-service ports"
+      cidr_blocks = "10.10.0.0/16"
+    },
+    {
+      rule        = "postgresql-tcp"
+      cidr_blocks = "0.0.0.0/0"
+    },
+  ]
+}
+
+module "ec2_instance" {
+  source  = "terraform-aws-modules/ec2-instance/aws"
+  version = "~> 3.0"
+
+  name = "single-instance"
+
+  ami                    = "ami-ebd02392"
+  instance_type          = "t2.micro"
+  key_name               = "user1"
+  monitoring             = true
+  vpc_security_group_ids = ["sg-12345678"]
+  subnet_id              = "subnet-eddcdzz4"
+
+  tags = {
+    Terraform   = "true"
+    Environment = "dev"
+  }
+}
+
+
+
+
+resource "aws_instance" "aws-instance" {
+    ami           = "${var.ami_id}"
+    instance_type = "${var.instance_type}"
+    key_name = "${var.key_name}"
+    availability_zone = "${var.availability_zone}"
+    associate_public_ip_address = true
+    security_groups = ["${aws_security_group.aws-security-group.name}"]
+
+
+    #tags {
+     # Name = "${var.name}"
+      #Environment = "${var.env}"
+      #CreatedBy = "terraform"
+    #}
+    
+    provisioner "remote-exec" {
+      # The connection will use the local SSH agent for authentication
+      inline = ["echo Successfully connected"]
+
+      # The connection block tells our provisioner how to communicate with the resource (instance)
+      connection {
+        user = "${local.vm_user}"
+        host     = coalesce(self.public_ip, self.private_ip)
+      }
+    }
+    provisioner "local-exec" {
+      command = <<EOT
+        echo [defaults] > ansible.cfg;
+        echo hostfile = inventory-${var.env} >> ansible.cfg;
+        echo host_key_checking = False >> ansible.cfg;
+        echo #private_key_file = ~/amazon/jijeesh/${var.key_name}.pem >> ansible.cfg;
+        echo deprecation_warnings=False >> ansible.cfg;
+        echo #gathering = smart >> ansible.cfg;
+        echo #fact_caching = jsonfile >> ansible.cfg;
+        echo #fact_caching_connection = /tmp/facts_cache >> ansible.cfg;
+        echo #fact_caching_timeout = 7200 >> ansible.cfg;
+        echo forks = 100 >> ansible.cfg;
+        echo bin_ansible_callbacks=True >> ansible.cfg;
+        echo connection_plugins = ../ansible/connection_plugins >> ansible.cfg;
+        echo [ssh_connection] >> ansible.cfg;
+        echo pipelining = True >> ansible.cfg;
+        echo control_path = /tmp/ansible-ssh-%%h-%%p-%%r >> ansible.cfg;
+        echo [${var.env}] > inventory-${var.env};
+        echo ${aws_instance.aws-instance.public_ip} ansible_python_interpreter=/usr/bin/python3 >> inventory-${var.env};
+        ansible-playbook -s main.yml
+        EOT
+      on_failure = "continue"
+    }
+
+
+
+    # This is where we configure the instance with ansible-playbook
+
+    provisioner "local-exec" {
+
+      #command = "echo ${aws_instance.jenkins_master.public_ip} >> ${var.env}"
+        # command = "ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook -u ${local.vm_user}  -i '${aws_instance.aws-instance.public_ip},' -e 'ansible_python_interpreter=/usr/bin/python3' master.yml"
+        command = "ansible-playbook -s main.yml"
+    }
+}
+
+output "public_ip" {
+  value = "${aws_instance.aws-instance.public_ip}"
+}
+
+
+
+/*resource "aws_instance" "jenkins" {
+  instance_type = "${var.instance_type}"
+  ami = "${var.ami}"
+  key_name = "${var.key_name}"
+
+  subnet_id = "${var.subnet_id}"
+  vpc_security_group_ids = ["sg_jenkins"]
+
+  iam_instance_profile = "${var.iam_instance_profile}"
+
+  # The connection block tells our provisioner how to
+  # communicate with the resource (instance)
+  connection {
+    # The default username for our AMI
+    user = "${var.vm_user}"
+    host     = coalesce(self.public_ip, self.private_ip)
+    # The connection will use the local SSH agent for authentication.
+  }
+
+  #tags {
+  #  Name = "${var.jenkins_name}"
+  #}
+
+  # force Terraform to wait until a connection can be made, so that Ansible doesn't fail when trying to provision
+  provisioner "remote-exec" {
+    inline = [
+      "echo 'Remote execution connected.'"
+    ]
+  }
+}*/
