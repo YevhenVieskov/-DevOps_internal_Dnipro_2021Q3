@@ -1,0 +1,8 @@
+Add this to gradle.properties:
+
+org.gradle.java.home=C:\\Program Files\\Java\\jdk1.8.0_91
+Don’t forget to use double back slashes. For example: org.gradle.java.home=C:\\Program Files\\Java\\jdk1.8.0_144\ .
+
+
+install again
+sudo apt-get install openjdk-8-jdk-headless
