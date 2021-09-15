@@ -1,0 +1,73 @@
+---
+name: terraform-aws-vpc-peering
+on:
+  push:
+    branches:
+      - master
+      - terraform011
+    paths-ignore:
+      - '**.md'
+  pull_request:
+    types:
+      - opened
+      - edited
+      - reopened
+      - synchronize
+    paths-ignore:
+      - '**.md'
+
+jobs:
+  terraform-static:
+    name: terraform-fmt
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        terraform: ['0.15.0']
+    steps:
+      -  uses: actions/checkout@master
+      -  uses: hashicorp/setup-terraform@v1
+         with:
+           terraform_version: ${{ matrix.terraform }}
+
+      - name: Terraform Format
+        id: fmt
+        run: terraform fmt -check
+
+  terratest:
+    name: terratest
+    runs-on: ubuntu-latest
+    strategy:
+      max-parallel: 1
+      matrix:
+        terraform: ['0.15.0']
+    steps:
+      - name: Set up Go
+        uses: actions/setup-go@v2
+        with:
+          go-version: '1.16'
+
+      - name: Checkout
+        uses: actions/checkout@v1
+        with:
+          fetch-depth: 1
+
+      - name: Install Build Dependencies
+        env:
+          TF_VERSION: ${{ matrix.terraform }}
+        run: >
+          wget https://releases.hashicorp.com/terraform/${TF_VERSION}/terraform_${TF_VERSION}_linux_amd64.zip -O /tmp/terraform.zip &&
+          sudo unzip -d /tmp/ /tmp/terraform.zip &&
+          sudo mv /tmp/terraform /usr/local/bin/
+
+      - name: Terratest
+        env:
+          GOPATH: /home/runner/work/terraform-aws-vpc-peering/go
+          TF_VAR_aws_peer_access_key: ${{ secrets.TF_VAR_aws_peer_access_key }}
+          TF_VAR_aws_peer_secret_key: ${{ secrets.TF_VAR_aws_peer_secret_key }}
+          TF_VAR_aws_this_access_key: ${{ secrets.TF_VAR_aws_this_access_key }}
+          TF_VAR_aws_this_secret_key: ${{ secrets.TF_VAR_aws_this_secret_key }}
+        run: >
+          go mod init github.com/grem11n/terraform-aws-vpc-peering &&
+          go mod tidy &&
+          echo 'package main' > main.go &&
+          go test -v -timeout=30m ./...
