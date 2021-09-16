@@ -1,4 +1,4 @@
-provider "aws" {
+/*provider "aws" {
   region  = var.default_region // Interpolation Syntax
   profile = var.profile
 
@@ -24,5 +24,12 @@ terraform {
     region         = "us-east-1"
     encrypt        = "true"
   }
-}
+}*/
 
+
+provider "aws" {
+  region  = "us-east-2" // Interpolation Syntax
+  profile = "vieskovtf"
+
+  version = ">= 2.22.0" // AWS plugin version
+}

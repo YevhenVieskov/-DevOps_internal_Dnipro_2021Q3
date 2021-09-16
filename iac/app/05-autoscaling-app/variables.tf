@@ -1,19 +1,19 @@
 variable "aws_region" {
   type        = string
   description = ""
-  default     = "eu-central-1"
+  default     = "us-east-2"
 }
 
 variable "aws_profile" {
   type        = string
   description = ""
-  default     = "tf014"
+  default     = "vieskovtf"
 }
 
 variable "aws_account_id" {
   type        = number
   description = ""
-  default     = 968339500772
+  default     = 052776272001
 }
 
 variable "service_name" {
@@ -25,11 +25,11 @@ variable "service_name" {
 variable "instance_type" {
   type        = string
   description = ""
-  default     = "t3.micro"
+  default     = "t2.micro"
 }
 
 variable "instance_key_name" {
   type        = string
   description = ""
-  default     = "cleber_kp"
+  default     = "vieskovtf"
 }

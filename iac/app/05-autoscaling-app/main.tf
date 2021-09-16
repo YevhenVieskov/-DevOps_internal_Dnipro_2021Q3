@@ -1,4 +1,4 @@
-terraform {
+/*terraform {
   required_version = "0.14.8"
 
   required_providers {
@@ -13,7 +13,7 @@ terraform {
   }
 
   backend "s3" {}
-}
+}*/
 
 provider "aws" {
   region  = var.aws_region

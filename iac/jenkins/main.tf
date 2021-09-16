@@ -1,6 +1,129 @@
+module "ec2_instance" {
+  source  = "terraform-aws-modules/ec2-instance/aws"
+  version = "~> 3.0"
+
+  name = var.name
+
+  ami                    = data.aws_ami.jenkins-master-ami.id  
+  instance_type          = var.instance_type
+  #availability_zone      = var.availability_zone
+  key_name               = var.ssh_key_name
+  monitoring             = true
+  vpc_security_group_ids = ["sg-12345678"] #var.jenkins_security_group_id  #"${module.security_group_rules.jenkins_security_group_id}"   
+  subnet_id              = "subnet-eddcdzz4" 
+
+  user_data              = file("../../ansible/jenkins_master.sh") 
+
+  tags = {
+    Terraform   = "true"
+    Environment = var.environment
+  }
+}
+
+
+module "ec2_instance" {
+  source  = "terraform-aws-modules/ec2-instance/aws"
+  version = "~> 3.0"
+
+  name = "jenkins-slave"
+
+  ami                    = data.aws_ami.jenkins-slave-ami.id  
+  instance_type          = var.instance_type
+  availability_zone      = var.availability_zone
+  key_name               = var.ssh_key_name
+  monitoring             = true
+  vpc_security_group_ids = ["sg-12345678"]   
+  subnet_id              = "subnet-eddcdzz4" 
+
+  user_data              = file("../../ansible/jenkins_slave.sh") 
+
+  tags = {
+    Terraform   = "true"
+    Environment = var.environment
+  }
+}
 
 
 module "vpc" {
+  source = "terraform-aws-modules/vpc/aws"
+
+  name = "my-vpc"
+  cidr = "10.0.0.0/16"
+
+  azs             = ["eu-west-1a", "eu-west-1b", "eu-west-1c"]
+  private_subnets = ["10.0.1.0/24", "10.0.2.0/24", "10.0.3.0/24"]
+  public_subnets  = ["10.0.101.0/24", "10.0.102.0/24", "10.0.103.0/24"]
+
+  enable_nat_gateway = true
+  enable_vpn_gateway = true
+
+  tags = {
+    Terraform = "true"
+    Environment = var.environment
+  }
+}
+
+
+/*module "security_group_rules" {
+  source = "../jenkins-security-group-rules"
+
+  name      = "${var.name}"
+  allowed_inbound_cidr_blocks = ["${var.allowed_inbound_cidr_blocks}"]
+  allowed_ssh_cidr_blocks = ["${var.allowed_ssh_cidr_blocks}"]
+
+  http_port = "${var.http_port}"
+  https_port = "${var.https_port}"
+  jnlp_port = "${var.jnlp_port}"
+}
+
+# Add the application load balancer
+module "jenkins-alb" {
+  source                      = "../jenkins-alb"
+  name_prefix                 = "${var.alb_prefix}"
+  vpc_id                      = "${var.vpc_id}"
+  allowed_inbound_cidr_blocks = "${var.allowed_inbound_cidr_blocks}"
+  http_port                   = "${var.http_port}"
+  jenkins_instance_id         = "${aws_instance.ec2_jenkins_master.id}"
+  subnet_ids                  = "${var.subnet_ids}"
+  aws_ssl_certificate_arn     = "${var.aws_ssl_certificate_arn}"
+  app_dns_name                = "${var.app_dns_name}"
+  dns_zone                    = "${var.dns_zone}"
+}*/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*module "vpc" {
   source  = "terraform-aws-modules/vpc/aws"
   version = "~> 2"
 
@@ -171,7 +294,7 @@ resource "aws_instance" "aws-instance" {
 
 output "public_ip" {
   value = "${aws_instance.aws-instance.public_ip}"
-}
+}*/
 
 
 
