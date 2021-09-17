@@ -3,7 +3,7 @@ output "vpc_id" {
   value       = module.vpc.vpc_id
 }
 
-/*output "public_subnets" {
+output "public_subnets" {
   description = "ID of the VPC public subnet"
   value       = module.vpc.public_subnets
 }
@@ -13,7 +13,7 @@ output "private_subnets" {
   value       = module.vpc.private_subnets
 }
 
-output "jenkins_master_sg_id" {
+/*output "jenkins_master_sg_id" {
   description = "ID of the Jenkins master security group"
   value       = module.jenkins_master_sg.security_group_id
 }

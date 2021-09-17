@@ -1,103 +1,115 @@
-/*resource "aws_db_subnet_group" "default" {
-  name       = "main"
-  subnet_ids = [aws_subnet.this["pvt_a"].id, aws_subnet.this["pvt_b"].id]
+/*module "vpc" {
+  source  = "terraform-aws-modules/vpc/aws"
+  version = "~> 2"
 
-  tags = merge(local.common_tags, { Name = "DB subnet group" })
+  name = local.name
+  cidr = "10.99.0.0/18"
+
+  azs              = ["${local.region}a", "${local.region}b", "${local.region}c"]
+  public_subnets   = ["10.99.0.0/24", "10.99.1.0/24", "10.99.2.0/24"]
+  private_subnets  = ["10.99.3.0/24", "10.99.4.0/24", "10.99.5.0/24"]
+  database_subnets = ["10.99.7.0/24", "10.99.8.0/24", "10.99.9.0/24"]
+
+  create_database_subnet_group = true
+
+  tags = local.tags
 }
 
-private_subnets = [var.pvt_a, var.pvt_b]
+module "security_group" {
+  source  = "terraform-aws-modules/security-group/aws"
+  version = "~> 4"
 
-module.vpc.private_subnets
+  name        = local.name
+  description = "Complete PostgreSQL example security group"
+  vpc_id      = module.vpc.vpc_id
 
-resource "aws_db_instance" "web" {
-  allocated_storage    = 10
-  storage_type         = "gp2"
-  engine               = "mysql"
-  engine_version       = "5.7"
-  instance_class       = "db.t2.micro"
-  name                 = "mydb"
-  username             = "foo"
-  password             = "foobarbaz"
-  parameter_group_name = "default.mysql5.7"
-  availability_zone    = "${var.aws_region}a"
-  skip_final_snapshot  = true
+  # ingress
+  ingress_with_cidr_blocks = [
+    {
+      from_port   = 5432
+      to_port     = 5432
+      protocol    = "tcp"
+      description = "PostgreSQL access from within VPC"
+      cidr_blocks = module.vpc.vpc_cidr_block
+    },
+  ]
 
-  db_subnet_group_name   = aws_db_subnet_group.default.id
-  vpc_security_group_ids = [aws_security_group.db.id]
+  tags = local.tags
 }*/
 
+################################################################################
+# RDS Module
+################################################################################
 
 module "dbi" {
-  source  = "terraform-aws-modules/rds/aws"
-  version = "~> 3.0"
+  source = "terraform-aws-modules/rds/aws"
 
-  identifier = "webdb"
+  identifier = var.db_name
 
-  engine            = "mysql"
-  engine_version    = "5.7.19"
-  instance_class    = "db.t2.large"
-  allocated_storage = 5
+  # All available versions: https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_PostgreSQL.html#PostgreSQL.Concepts
+  engine               = var.db_engine
+  engine_version       = var.db_engine_version
+  family               = var.db_family # DB parameter group
+  major_engine_version = var.db_major_engine_version         # DB option group
+  instance_class       = var.db_instance_class
 
-  name     = "webdb"
-  username = "vieskovtf"
+  allocated_storage     = var.db_allocated_storage
+  max_allocated_storage = var.db_max_allocated_storage
+  storage_encrypted     = var.db_storage_encrypted
+
+  # NOTE: Do NOT use 'user' as the value for 'username' as it throws:
+  # "Error creating DB Instance: InvalidParameterValue: MasterUsername
+  # user cannot be used as it is a reserved word used by the engine"
+  name     = "completePostgresql"
+  username = "complete_postgresql"
   password = "YourPwdShouldBeLongAndSecure!"
-  port     = "3306"
+  port     = 5432
 
-  iam_database_authentication_enabled = true
+  multi_az               = true
+  subnet_ids             = module.vpc.database_subnets
+  vpc_security_group_ids = [module.security_group.security_group_id]
 
-  vpc_security_group_ids = [module.db.security_group_id]
+  maintenance_window              = maintenance_window 
+  backup_window                   = backup_window
+  enabled_cloudwatch_logs_exports =  enabled_cloudwatch_logs_exports
 
-  maintenance_window = "Mon:00:00-Mon:03:00"
-  backup_window      = "03:00-06:00"
+  backup_retention_period = backup_retention_period
+  skip_final_snapshot     = skip_final_snapshot
+  deletion_protection     = deletion_protection
 
-  # Enhanced Monitoring - see example for details on how to create the role
-  # by yourself, in case you don't want to create it automatically
-  monitoring_interval = "30"
-  monitoring_role_name = "MyRDSMonitoringRole"
-  create_monitoring_role = true
-
-  tags = {
-    Owner       = "vieskovtf"
-    Environment = "dev"
-  }
-
-  # DB subnet group
-  subnet_ids =  module.vpc.private_subnets #["subnet-12345678", "subnet-87654321"]
-
-  # DB parameter group
-  family = "mysql5.7"
-
-  # DB option group
-  major_engine_version = "5.7"
-
-  # Database Deletion Protection
-  deletion_protection = true
+  performance_insights_enabled          = performance_insights_enabled
+  performance_insights_retention_period = performance_insights_retention_period
+  create_monitoring_role                = create_monitoring_role
+  monitoring_interval                   = monitoring_interval
+  monitoring_role_name                  = monitoring_role_name
+  monitoring_role_description           = monitoring_role_description
 
   parameters = [
     {
-      name = "character_set_client"
-      value = "utf8mb4"
+      name  = "autovacuum"
+      value = 1
     },
     {
-      name = "character_set_server"
-      value = "utf8mb4"
+      name  = "client_encoding"
+      value = "utf8"
     }
   ]
 
-  options = [
-    {
-      option_name = "MARIADB_AUDIT_PLUGIN"
-
-      option_settings = [
-        {
-          name  = "SERVER_AUDIT_EVENTS"
-          value = "CONNECT"
-        },
-        {
-          name  = "SERVER_AUDIT_FILE_ROTATIONS"
-          value = "37"
-        },
-      ]
-    },
-  ]
+  tags = var.tags
+  db_option_group_tags = {
+    "Sensitive" = "low"
+  }
+  db_parameter_group_tags = {
+    "Sensitive" = "low"
+  }
+  db_subnet_group_tags = {
+    "Sensitive" = "high"
+  }
 }
+
+
+
+
+
+
+

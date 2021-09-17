@@ -7,7 +7,7 @@ module "app_alb" {
   load_balancer_type = "application"
 
   vpc_id             = module.vpc.vpc_id
-  subnets            = module.vpc.private_subnets
+  subnets            = module.vpc.public_subnets
   security_groups    = [module.web.security_group_id]
 
   access_logs = {
@@ -37,7 +37,7 @@ module "app_alb" {
     {
       port               = 443
       protocol           = "HTTPS"
-      certificate_arn    = "arn:aws:acm:us-east-2:052776272001:certificate/5f64bc59-ee3e-4202-86e0-0edbb6f0afe7" #"arn:aws:iam::123456789012:server-certificate/test_cert-123456789012"
+      certificate_arn    = var.ssl_certificate_id #"arn:aws:iam::123456789012:server-certificate/test_cert-123456789012"
       target_group_index = 0
     }
   ]
