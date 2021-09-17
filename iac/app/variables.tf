@@ -55,11 +55,7 @@ variable "pvt_b" {
   default     = "192.168.4.0/24"
 }
 
- variable "db_port" {
-  description = "The port used for SSH connections"
-  type        = number
-  default     = 3306
-}
+ 
 
 variable "name" {
   description = "EC2 instance name"
@@ -148,7 +144,7 @@ variable "ssl_certificate_id" {
 variable "bastion_bucket_name" {
   description = "bastion_bucket_name"
   type        = string
-  default     = "bucket_bastion_dev"
+  default     = "bucket-bastion-dev"
 }
 
 
@@ -158,7 +154,7 @@ variable "bastion_bucket_name" {
 #################
 # Database
 #################
-variable "db_name" {
+variable "db_identifier" {
   description = "Database name"
   type        = string
   default     = "webdb"
@@ -192,7 +188,7 @@ variable "db_major_engine_version" {
 variable "db_instance_class" {
   description = "Database instance class"
   type        = string
-  default    =   db.t2.micro                    #"db.t3.large"  
+  default    =  "db.t3.large"  
 }
 
 variable "db_allocated_storage" {
@@ -268,19 +264,19 @@ variable "db_backup_retention_period" {
   default    =   0                   
 }
 
-variable "db_ skip_final_snapshot " {
+variable "db_skip_final_snapshot" {
   description = "Database skip final snapshot"
   type        = bool
   default    =   true                    
 }
 
-variable "db_ deletion_protection " {
+variable "db_deletion_protection" {
   description = "Database deletion protection"
   type        = bool
   default    =   false                    
 }
 
-variable "db_ performance_insights_enabled " {
+variable "db_performance_insights_enabled" {
   description = "Database  performance insights enabled"
   type        = bool
   default    =   true                   
@@ -292,13 +288,13 @@ variable "db_performance_insights_retention_period" {
   default    =   7                   
 }
 
-variable "db_  create_monitoring_role " {
+variable "db_create_monitoring_role" {
   description = "Database deletion protection"
   type        = bool
   default    =   true                    
 }
 
-variable "db_monitoring_interval " {
+variable "db_monitoring_interval" {
   description = "Database monitoring interval "
   type        = number
   default    =   60                   

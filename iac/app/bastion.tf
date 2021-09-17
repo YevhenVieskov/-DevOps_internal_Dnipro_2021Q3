@@ -6,7 +6,7 @@ module "bastion" {
   is_lb_private = false     #"true|false"
   bastion_host_key_pair = var.ssh_key_name
   create_dns_record =  true                              #"true|false"
-  hosted_zone_id = "vieskov.com"
+  hosted_zone_id = "dev.vieskov.com"
   bastion_record_name = "bastion.dev.vieskov.com"
   bastion_iam_policy_name = "myBastionHostPolicy"
   elb_subnets = module.vpc.public_subnets
