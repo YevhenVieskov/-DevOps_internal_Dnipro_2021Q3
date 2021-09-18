@@ -4,7 +4,7 @@ resource "aws_launch_template" "web-app-template" {
   image_id      = data.aws_ami.ubuntu.id
   instance_type = var.instance_type
   key_name      = var.ssh_key_name
-  user_data     = filebase64("ec2_setup.sh")
+  user_data     = filebase64("./ec2_setup.sh")
 
   monitoring {
     enabled = true

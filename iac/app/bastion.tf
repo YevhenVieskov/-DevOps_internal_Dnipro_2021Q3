@@ -1,4 +1,72 @@
+/*data "template_file" "bastion_init" {
+  template = "${file("./bustion-setup.sh")}"
+  vars = {    
+  }
+}*/
+
 module "bastion" {
+  source = "umotif-public/bastion/aws"
+  #source = "./mbastion"
+
+  name_prefix = "${var.env}-"
+
+  ami_id = data.aws_ami.ubuntu.id
+  region = var.region
+  availability_zones = ["${var.region}a", "${var.region}b"]
+  
+
+
+  vpc_id         = module.vpc.vpc_id
+  public_subnets = flatten([module.vpc.public_subnets])
+  
+  hosted_zone_id = aws_route53_zone.main.zone_id
+  ssh_key_name   = var.ssh_key_name
+
+  enable_asg_scale_down = true
+  enable_asg_scale_up   = true
+
+  delete_on_termination = true
+  volume_size           = var.bastion_volume_size
+  encrypted             = true
+  
+  #user_data = filebase64("./ec2_setup.sh")
+  #userdata_file_content = data.template_file.bastion_init
+  userdata_file_content = templatefile("${path.module}/bastion_setup.sh", {}) # if you want to use default one, simply remove this line
+
+   depends_on = [aws_route53_zone.main]
+
+  tags = {
+    Project = var.env
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*module "bastion" {
   source = "Guimove/bastion/aws"
   bucket_name = var.bastion_bucket_name
   region = var.region
@@ -15,7 +83,7 @@ module "bastion" {
     "name" = "vieskovtf_bastion",
     "description" = "vieskovtf_bastion_description"
   }
-}
+}*/
 
 
 
@@ -86,7 +154,7 @@ module "vpc" {
 # Bastion Host
 #####
 module "bastion" {
-  source = "../../"
+  source = "umotif-public/bastion/aws"
 
   name_prefix = "core-example"
 

@@ -111,16 +111,16 @@ variable "allowed_inbound_cidr_blocks" {
 variable "zone_name" {
   description = "Route 53 zone names"
   type        = string
-  default     = "dev.vieskov.com"
+  default     = "dev.vieskovtf.com"
 }
 
 variable "domain_name" {
   description = "Route 53 zone names"
   type        = string
-  default     = "vieskov.com"
+  default     = "vieskovtf.com"
 }
 
-variable "public_zone_id" {
+/*variable "public_zone_id" {
   description = "public zone id"
   type        = string
   default     = "Z1WA3EVJBXSQ2V"
@@ -130,7 +130,7 @@ variable "private_zone_id" {
   description = "Instance Type to use for Jenkins master"
   type        = string
   default     = "Z3CVA9QD5NHSW3"
-}
+}*/
 
 variable "ssl_certificate_id" {
   description = "Certificate for load balancer"
@@ -141,11 +141,18 @@ variable "ssl_certificate_id" {
 #################
 # Bastion
 #################
-variable "bastion_bucket_name" {
-  description = "bastion_bucket_name"
+variable "bucket_bastion" {
+  description = "bastion_bucket"
   type        = string
   default     = "bucket-bastion-dev"
 }
+
+variable "bastion_volume_size" {
+  description = "bastion_volume_size"
+  type        = number
+  default    =   10                    
+}
+
 
 
 

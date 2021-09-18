@@ -10,9 +10,9 @@ module "app_alb" {
   subnets            = module.vpc.public_subnets
   security_groups    = [module.web.security_group_id]
 
-  access_logs = {
+  /*access_logs = {
     bucket = "my-alb-logs"
-  }
+  }*/
 
   target_groups = [
     {
@@ -33,14 +33,14 @@ module "app_alb" {
     }
   ]
 
-  https_listeners = [
+  /*https_listeners = [
     {
       port               = 443
       protocol           = "HTTPS"
-      certificate_arn    = var.ssl_certificate_id #"arn:aws:iam::123456789012:server-certificate/test_cert-123456789012"
+      certificate_arn    =  module.acm.acm_certificate_arn //var.ssl_certificate_id #"arn:aws:iam::123456789012:server-certificate/test_cert-123456789012"
       target_group_index = 0
     }
-  ]
+  ]*/
 
   http_tcp_listeners = [
     {

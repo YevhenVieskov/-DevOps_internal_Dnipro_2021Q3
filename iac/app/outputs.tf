@@ -13,12 +13,22 @@ output "private_subnets" {
   value       = module.vpc.private_subnets
 }
 
-/*output "jenkins_master_sg_id" {
-  description = "ID of the Jenkins master security group"
-  value       = module.jenkins_master_sg.security_group_id
+
+/*output "sg_id" {
+  value = module.bastion.security_group_id
+}*/
+
+// The domain name.
+/*output "domain_name" {
+  value = "${var.domain_name}"
+}*/
+
+// The zone ID.
+/*output "zone_id" {
+  value = "${aws_route53_zone.main.zone_id}"
 }
 
-output "jenkins_slaves_sg_id" {
-  description = "ID of the Jenkins slaves security group"
-  value       = module.jenkins_slaves_sg.security_group_id
+// A comma separated list of the zone name servers.
+output "name_servers" {
+  value = "${join(",",aws_route53_zone.main.name_servers)}"
 }*/
