@@ -1,0 +1,56 @@
+#cpan[1]> install CPAN
+#cpan[2]> reload cpan
+sudo apt-get install make
+sudo apt-get install gcc
+sudo apt-get install patch
+o conf mbuild_install_arg "--uninst 1"
+o conf mbuild_install_build_command "sudo ./Build"
+o conf make_install_make_command "sudo make"
+sudo apt-get install libxml-writer-perl libxml-sax-base-perl libxml-perl libxml-filter-saxt-perl libtext-glob-perl
+cpan install DateTime Module::Find Web::Scraper Ouch Number::Format PerlIO::gzip Perl6::Junction List::MoreUtils LWP Module::Find Moose MooseX::Role::WithOverloading MooseX::Types Text::CSV_XS URI XML::Parser::PerlSAX XML::DOM Text::Glob MooseX::FollowPBP MooseX::ABC MooseX::FileAttribute
+sudo apt-get install postgresql
+sudo -u postgres psql
+update pg_database set datallowconn = TRUE where datname = 'template0';
+\c template0
+update pg_database set datistemplate = FALSE where datname = 'template1';
+drop database template1;
+create database template1 with template = template0 encoding = 'SQL_ASCII' LC_COLLATE='C' LC_CTYPE='C';
+update pg_database set datistemplate = TRUE where datname = 'template1';
+\c template1
+update pg_database set datallowconn = FALSE where datname = 'template0';
+\q
+
+shmall = phys_pages / 2
+shmmax = shmall * pagesize
+
+sudo vim /etc/sysctl.d/30-postgresql-shm.conf
+
+sudo sysctl -p /etc/sysctl.d/30-postgresql-shm.conf
+
+# for Ubuntu
+sudo apt-get install maven
+
+#tomcat installation
+sudo apt-get update
+sudo groupadd tomcat
+sudo useradd -s /bin/false -g tomcat -d /opt/tomcat tomcat
+cd /tmp
+curl -O https://dlcdn.apache.org/tomcat/tomcat-8/v8.5.71/bin/apache-tomcat-8.5.71.tar.gz
+sudo mkdir /opt/tomcat
+sudo tar xzvf apache-tomcat-8*tar.gz -C /opt/tomcat --strip-components=1
+cd /opt/tomcat
+sudo chgrp -R tomcat /opt/tomcat
+sudo chmod -R g+r conf
+sudo chmod g+x conf
+sudo chown -R tomcat webapps/ work/ temp/ logs/
+sudo update-java-alternatives -l
+export JAVA_HOME="/usr/lib/jvm/java-1.8.0-openjdk-amd64/jre"
+export PATH=$JAVA_HOME/bin:$PATH
+sudo nano /etc/systemd/system/tomcat.service
+sudo systemctl daemon-reload
+sudo systemctl start tomcat
+sudo systemctl status tomcat
+
+
+
+

@@ -1,4 +1,4 @@
-data "aws_ami" "ubuntu" {
+data "aws_ami" "jenkins-master-ami" {
     most_recent = true
 
     filter {
