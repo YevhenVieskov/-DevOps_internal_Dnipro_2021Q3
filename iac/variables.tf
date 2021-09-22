@@ -32,6 +32,22 @@ variable "availability_zone_jenkins" {
   default     = "us-east-2b"
 }
 
+variable "region_dev" {
+  description = "Region for AWS dev network "
+  type        = string
+  default     = "us-east-2"
+}
+
+variable "region_prod" {
+  description = "Region for AWS dev network "
+  type        = string
+  default     = "us-east-2"
+}
+
+
+
+
+
 #################
 # Environment
 #################
@@ -41,6 +57,20 @@ variable "env_jenkins" {
   type        = string
   default     = "jenkins"
 }
+
+variable "env_dev" {
+  description = "Environment tag"
+  type        = string
+  default     = "dev"
+}
+
+variable "env_prod" {
+  description = "Environment tag"
+  type        = string
+  default     = "dev"
+}
+
+
 
 #################
 # Tags
@@ -71,6 +101,17 @@ variable "jsname" {
   default     = "jenkins-slave"
 }
 
+variable "alb_name_dev" {
+  description = "Name of jenkins master"
+  type        = string
+  default     = "alb-app-dev"
+}
+
+variable "alb_name_prod" {
+  description = "Name of jenkins master"
+  type        = string
+  default     = "alb-app-prod"
+}
 
 
 
@@ -83,6 +124,20 @@ variable "instance_type_jenkins" {
   type        = string
   default     = "t2.micro"
 }
+
+variable "instance_type_dev" {
+  description = "Instance Type to use for dev"
+  type        = string
+  default     = "t2.micro"
+}
+
+variable "instance_type_prod" {
+  description = "Instance Type to use for prod"
+  type        = string
+  default     = "t2.micro"
+}
+
+
 
 #################
 # Network Jenkins
@@ -231,6 +286,8 @@ variable "peer_cidr_block_prod" {
   default     = "10.2.0.0/16"
 }
 
+
+
 #################
 # User Data
 #################
@@ -238,14 +295,59 @@ variable "peer_cidr_block_prod" {
 variable "udata_jmaster" {
   description = "User Data to use for Jenkins master"
   type        = string
-  default     = "./ec2_setup2.sh"
+  default     = "./jmaster_setup.sh"
 }
 
 variable "udata_jslave" {
   description = "User Data to use for Jenkins master"
   type        = string
-  default     = "./ec2_setup2.sh"
+  default     = "./jslave_setup.sh"
 }
+
+variable "udata_dev" {
+  description = "Name to be used for the Jenkins master instance"
+  type        = string
+  default     = "./dev_setup.sh"
+}
+
+variable "udata_asg_prod" {
+  description = "Name to be used for the Jenkins master instance"
+  type        = string
+  default     = "./prod_setup.sh"
+}
+
+#################
+# Route 53
+#################
+
+variable "domain_name" {
+  description = "domain_name"
+  type        = string
+  default     = "vieskovtf.com"
+}
+
+/*variable "zone_name" {
+  description = "Route 53 zone name"
+  type        = string  
+}
+
+variable "zone_id" {
+  description = "Route 53 zone id"
+  type        = string  
+}*/
+
+variable "create_certificate" {
+  description = "Create ACM certificate"
+  type        = bool
+  default     = false
+}
+
+variable "wait_for_validation" {
+  description = "Validation ACM certificate"
+  type        = bool
+  default     = true
+}
+
 
 
 

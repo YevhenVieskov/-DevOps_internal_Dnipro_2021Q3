@@ -19,6 +19,62 @@ module "jenkins" {
   udata_jslave      = file("${path.module}/${var.udata_jslave}")
 }
 
+
+#################
+# Route53
+#################
+
+resource "aws_route53_zone" "main" {
+  name = var.domain_name
+}
+
+resource "aws_route53_record" "ns_record" {
+  allow_overwrite = true
+  name            = var.domain_name
+  ttl             = 172800
+  type            = "NS"
+  zone_id         = aws_route53_zone.main.zone_id
+
+  records = [
+    aws_route53_zone.main.name_servers[0],
+    aws_route53_zone.main.name_servers[1],
+    aws_route53_zone.main.name_servers[2],
+    aws_route53_zone.main.name_servers[3],
+  ]
+}
+
+
+
+#################
+# dev
+#################
+module "dev"{
+  source  = "./modules/app"
+  region = var.region_dev  
+  env                  = var.env_dev
+  domain_name          = var.domain_name
+  zone_name            = "${var.env_dev}.${aws_route53_zone.main.name}"
+  zone_id              = aws_route53_zone.main.zone_id
+  hosted_zone_id       = aws_route53_zone.main.zone_id
+  create_certificate   = var.create_certificate
+  wait_for_validation  = var.wait_for_validation
+  instance_type        = var.instance_type_dev
+  vpc_cidr             = var.vpc_cidr_dev
+  pub_a                = var.pub_a_dev
+  pub_b                = var.pub_b_dev
+  pvt_a                = var.pvt_a_dev
+  pvt_b                = var.pvt_b_dev
+  ssh_key_name         = var.ssh_key_name 
+  udata_asg            = file("${path.module}/${var.udata_dev}")
+}
+
+
+
+
+#################
+# prod
+#################
+
 #################
 # Peering Connection
 #################
@@ -97,18 +153,8 @@ resource "aws_vpc_peering_connection_accepter" "peer_prod" {
 
 
 
-#################
-# dev
-#################
 
 
-#################
-# prod
-#################
-
-#################
-# Route53
-#################
 
 
 

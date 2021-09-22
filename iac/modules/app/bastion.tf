@@ -19,7 +19,7 @@ module "bastion" {
   vpc_id         = module.vpc.vpc_id
   public_subnets = flatten([module.vpc.public_subnets])
   
-  hosted_zone_id = aws_route53_zone.main.zone_id
+  hosted_zone_id = var.hosted_zone_id
   ssh_key_name   = var.ssh_key_name
 
   enable_asg_scale_down = true
@@ -33,7 +33,7 @@ module "bastion" {
   #userdata_file_content = data.template_file.bastion_init
   userdata_file_content = templatefile("${path.module}/bastion_setup.sh", {}) # if you want to use default one, simply remove this line
 
-   depends_on = [aws_route53_zone.main]
+  #depends_on = [aws_route53_zone.main]  ###
 
   tags = {
     Project = var.env

@@ -14,6 +14,11 @@ output "private_subnets" {
 }
 
 
+  
+
+
+
+
 /*output "sg_id" {
   value = module.bastion.security_group_id
 }*/
