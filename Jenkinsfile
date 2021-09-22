@@ -1,8 +1,9 @@
 // Jenkinsfile
 String credentialsId = 'awsCredentials'
+properties([pipelineTriggers([githubPush()])])
 pipeline {
 
-  agent {any}
+  agent any
   options {
     disableConcurrentBuilds()
   }
@@ -10,6 +11,7 @@ pipeline {
   stages{
     stage("Checkout") {
       steps {
+        //git branch: 'master', credentialsId: 'gitlab-scm', url: 'https://gitlab.devops-demo.pp.ua:8443/root/intermine'
 
       }
     }
