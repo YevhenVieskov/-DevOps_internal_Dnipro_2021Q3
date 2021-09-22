@@ -1,6 +1,6 @@
 // Jenkinsfile
 String credentialsId = 'awsCredentials'
-pipeline{
+pipeline {
 
   agent {any}
   options {
@@ -14,28 +14,14 @@ pipeline{
       }
     }
     
-    stage("S3 backend init") {
-      script{
-        withCredentials([[
-        $class: 'AmazonWebServicesCredentialsBinding',
-        credentialsId: credentialsId,
-        accessKeyVariable: 'AWS_ACCESS_KEY_ID',
-        secretKeyVariable: 'AWS_SECRET_ACCESS_KEY'
-        ]]) {
-          ansiColor('xterm') {
-             sh 'cd ./s3_tfstate'
-             sh 'terraform init'
-          }
-    }
+    
 
-  }
-
-}
+} //pipeline
 
 
 
 
-
+/*
 
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 try {
@@ -126,5 +112,7 @@ finally {
     currentBuild.result = 'SUCCESS'
   }
 }
+
+*/
 
 
