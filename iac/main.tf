@@ -50,14 +50,19 @@ resource "aws_route53_record" "ns_record" {
 #################
 module "dev"{
   source  = "./modules/app"
+
+  ###################
+  # Network variables
+  ###################
   region = var.region_dev  
   env                  = var.env_dev
   domain_name          = var.domain_name
   zone_name            = "${var.env_dev}.${aws_route53_zone.main.name}"
   zone_id              = aws_route53_zone.main.zone_id
   hosted_zone_id       = aws_route53_zone.main.zone_id
-  create_certificate   = var.create_certificate
-  wait_for_validation  = var.wait_for_validation
+  create_certificate   = var.create_certificate_dev
+  wait_for_validation  = var.wait_for_validation_dev
+  alb_name             = var.alb_name_dev
   instance_type        = var.instance_type_dev
   vpc_cidr             = var.vpc_cidr_dev
   pub_a                = var.pub_a_dev
@@ -66,6 +71,37 @@ module "dev"{
   pvt_b                = var.pvt_b_dev
   ssh_key_name         = var.ssh_key_name 
   udata_asg            = file("${path.module}/${var.udata_dev}")
+
+  #################
+  # Database
+  #################
+  db_identifier                             = var.db_identifier_dev
+  db_engine                                 = var.db_engine_dev
+  db_engine_version                         = var.db_engine_version_dev
+  db_family                                 = var.db_family_dev
+  db_major_engine_version                   = var.db_major_engine_version_dev
+  db_instance_class                         = var.db_instance_class_dev
+  db_allocated_storage                      = var.db_allocated_storage_dev
+  db_max_allocated_storage                  = var.db_max_allocated_storage_dev
+  db_storage_encrypted                      = var.db_storage_encrypted_dev 
+  db_name                                   = var.db_name_dev 
+  db_username                               = var.db_username_dev
+  db_password                               = var.db_password_dev  
+  db_port                                   = var.db_port_dev
+  db_multi_az                               = var.db_multi_az_dev 
+  db_maintenance_window                     = var.db_maintenance_window_dev
+  db_backup_window                          = var.db_backup_window_dev 
+  db_enabled_cloudwatch_logs_exports        = var.db_enabled_cloudwatch_logs_exports_dev
+  db_backup_retention_period                = var.db_backup_retention_period_dev 
+  db_skip_final_snapshot                    = var.db_skip_final_snapshot_dev 
+  db_deletion_protection                    = var.db_deletion_protection_dev
+  db_performance_insights_enabled           = var.db_performance_insights_enabled_dev 
+  db_performance_insights_retention_period  = var.db_performance_insights_retention_period_dev 
+  db_create_monitoring_role                 = var.db_create_monitoring_role_dev
+  db_monitoring_interval                    = var.db_monitoring_interval_dev 
+  db_monitoring_role_name                   = var.db_monitoring_role_name_dev
+  db_monitoring_role_description            = var.db_monitoring_role_description_dev 
+
 }
 
 
@@ -74,6 +110,58 @@ module "dev"{
 #################
 # prod
 #################
+
+module "prod"{
+  source  = "./modules/app"
+  region = var.region_prod  
+  env                  = var.env_prod
+  domain_name          = var.domain_name
+  zone_name            = "${var.env_prod}.${aws_route53_zone.main.name}"
+  zone_id              = aws_route53_zone.main.zone_id
+  hosted_zone_id       = aws_route53_zone.main.zone_id
+  create_certificate   = var.create_certificate_prod
+  wait_for_validation  = var.wait_for_validation_prod
+  alb_name             = var.alb_name_prod
+  instance_type        = var.instance_type_prod
+  vpc_cidr             = var.vpc_cidr_prod
+  pub_a                = var.pub_a_prod
+  pub_b                = var.pub_b_prod
+  pvt_a                = var.pvt_a_prod
+  pvt_b                = var.pvt_b_prod
+  ssh_key_name         = var.ssh_key_name 
+  udata_asg            = file("${path.module}/${var.udata_prod}")
+
+  #################
+  # Database
+  #################
+  db_identifier                             = var.db_identifier_prod
+  db_engine                                 = var.db_engine_prod
+  db_engine_version                         = var.db_engine_version_prod
+  db_family                                 = var.db_family_prod
+  db_major_engine_version                   = var.db_major_engine_version_prod
+  db_instance_class                         = var.db_instance_class_prod
+  db_allocated_storage                      = var.db_allocated_storage_prod
+  db_max_allocated_storage                  = var.db_max_allocated_storage_prod
+  db_storage_encrypted                      = var.db_storage_encrypted_prod 
+  db_name                                   = var.db_name_prod 
+  db_username                               = var.db_username_prod
+  db_password                               = var.db_password_prod  
+  db_port                                   = var.db_port_prod
+  db_multi_az                               = var.db_multi_az_prod 
+  db_maintenance_window                     = var.db_maintenance_window_prod 
+  db_backup_window                          = var.db_backup_window_prod 
+  db_enabled_cloudwatch_logs_exports        = var.db_enabled_cloudwatch_logs_exports_prod
+  db_backup_retention_period                = var.db_backup_retention_period_prod 
+  db_skip_final_snapshot                    = var.db_skip_final_snapshot_prod 
+  db_deletion_protection                    = var.db_deletion_protection_prod
+  db_performance_insights_enabled           = var.db_performance_insights_enabled_prod 
+  db_performance_insights_retention_period  = var.db_performance_insights_retention_period_prod 
+  db_create_monitoring_role                 = var.db_create_monitoring_role_prod
+  db_monitoring_interval                    = var.db_monitoring_interval_prod 
+  db_monitoring_role_name                   = var.db_monitoring_role_name_prod
+  db_monitoring_role_description            = var.db_monitoring_role_description_prod 
+}
+
 
 #################
 # Peering Connection

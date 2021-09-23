@@ -67,7 +67,7 @@ variable "env_dev" {
 variable "env_prod" {
   description = "Environment tag"
   type        = string
-  default     = "dev"
+  default     = "prod"
 }
 
 
@@ -186,32 +186,32 @@ variable "vpc_name_dev" {
 
 variable "vpc_cidr_dev" {
   type        = string
-  default = "192.168.0.0/16"
+  default = "10.1.0.0/16"
 }
 
 variable "pub_a_dev" {
   description = "subnet"
   type        = string
-  default     = "192.168.1.0/24"
+  default     = "10.1.1.0/24"
 }
 
 
 variable "pub_b_dev" {
   description = "subnet"
   type        = string
-  default     = "192.168.2.0/24"
+  default     = "10.1.2.0/24"
 }
 
 variable "pvt_a_dev" {
   description = "subnet"
   type        = string
-  default     = "192.168.3.0/24"
+  default     = "10.1.3.0/24"
 }
 
 variable "pvt_b_dev" {
   description = "subnet"
   type        = string
-  default     = "192.168.4.0/24"
+  default     = "10.1.4.0/24"
 }
 
 #################
@@ -226,32 +226,32 @@ variable "vpc_name_prod" {
 
 variable "vpc_cidr_prod" {
   type        = string
-  default = "192.168.10.0/16"
+  default = "10.2.0.0/16"
 }
 
 variable "pub_a_prod" {
   description = "subnet"
   type        = string
-  default     = "192.168.11.0/24"
+  default     = "10.2.5.0/24"
 }
 
 
 variable "pub_b_prod" {
   description = "subnet"
   type        = string
-  default     = "192.168.12.0/24"
+  default     = "10.2.6.0/24"
 }
 
 variable "pvt_a_prod" {
   description = "subnet"
   type        = string
-  default     = "192.168.13.0/24"
+  default     = "10.2.7.0/24"
 }
 
 variable "pvt_b_prod" {
   description = "subnet"
   type        = string
-  default     = "192.168.14.0/24"
+  default     = "10.2.8.0/24"
 }
 
 
@@ -281,7 +281,7 @@ variable "peer_cidr_block_dev" {
 }
 
 variable "peer_cidr_block_prod" {
-  description = "Peer connection to dev"
+  description = "Peer connection to prod"
   type        = string
   default     = "10.2.0.0/16"
 }
@@ -305,6 +305,18 @@ variable "udata_jslave" {
 }
 
 variable "udata_dev" {
+  description = "Name to be used for the Jenkins master instance"
+  type        = string
+  default     = "./dev_setup.sh"
+}
+
+variable "udata_prod" {
+  description = "Name to be used for the dev web app"
+  type        = string
+  default     = "./prod_setup.sh"
+}
+
+variable "udata_asg_dev" {
   description = "Name to be used for the Jenkins master instance"
   type        = string
   default     = "./dev_setup.sh"
@@ -336,17 +348,357 @@ variable "zone_id" {
   type        = string  
 }*/
 
-variable "create_certificate" {
+variable "create_certificate_dev" {
   description = "Create ACM certificate"
   type        = bool
   default     = false
 }
 
-variable "wait_for_validation" {
+variable "wait_for_validation_dev" {
   description = "Validation ACM certificate"
   type        = bool
   default     = true
 }
+
+variable "create_certificate_prod" {
+  description = "Create ACM certificate"
+  type        = bool
+  default     = false
+}
+
+variable "wait_for_validation_prod" {
+  description = "Validation ACM certificate"
+  type        = bool
+  default     = true
+}
+
+
+
+#################
+# Database
+#################
+
+## prod ##
+
+variable "db_identifier_dev" {
+  description = "Database name"
+  type        = string
+  default     = "webdb"
+}
+
+
+variable "db_engine_dev" {
+  description = "Database engine"
+  type        = string
+  default     ="postgres"
+}
+
+variable "db_engine_version_dev" {
+  description = "Database engine version"
+  type        = string
+  default     ="11.10"
+}
+
+variable "db_family_dev" {
+  description = "Database family"
+  type        = string
+  default    = "postgres11"
+}
+
+variable "db_major_engine_version_dev" {
+  description = "Database major engine version"
+  type        = string
+  default    = "11" 
+}
+
+variable "db_instance_class_dev" {
+  description = "Database instance class"
+  type        = string
+  default    =  "db.t3.large"  
+}
+
+variable "db_allocated_storage_dev" {
+  description = "Database allocated storage"
+  type        = number
+  default    =   20                    
+}
+
+variable "db_max_allocated_storage_dev" {
+  description = "Database max allocated storage"
+  type        = number
+  default    =   100                    
+}
+
+variable "db_storage_encrypted_dev" {
+  description = "Database storage encrypted"
+  type        = bool
+  default    =   false                    
+}
+
+variable "db_name_dev" {
+  description = "Database name"
+  type        =  string
+  default   =  "completePostgresql"
+}
+
+
+variable "db_username_dev" {
+  description = "Database username"
+  type        =  string
+  default   = "complete_postgresql"
+}
+
+variable "db_password_dev" {
+  description = "Database password"
+  type        =  string
+  default   = "YourPwdShouldBeLongAndSecure!"
+}
+
+variable "db_port_dev" {
+  description = "Database port"
+  type        = number
+  default    =   5432                    
+}
+
+variable "db_multi_az_dev" {
+  description = "Database multi available zone"
+  type        = bool
+  default    =   true                    
+}
+
+variable "db_maintenance_window_dev" {
+  description = "Database username"
+  type        =  string
+  default   = "Mon:00:00-Mon:03:00"
+}
+
+variable "db_backup_window_dev" {
+  description = "Database username"
+  type        =  string
+  default   = "03:00-06:00"
+}
+
+variable "db_enabled_cloudwatch_logs_exports_dev" {
+  description = "Database enabled cloudwatch logs exports"
+  type        =  list
+  default   = ["postgresql", "upgrade"]
+}
+
+variable "db_backup_retention_period_dev" {
+  description = "Database backup retention period"
+  type        = number
+  default    =   0                   
+}
+
+variable "db_skip_final_snapshot_dev" {
+  description = "Database skip final snapshot"
+  type        = bool
+  default    =   true                    
+}
+
+variable "db_deletion_protection_dev" {
+  description = "Database deletion protection"
+  type        = bool
+  default    =   false                    
+}
+
+variable "db_performance_insights_enabled_dev" {
+  description = "Database  performance insights enabled"
+  type        = bool
+  default    =   true                   
+}
+
+variable "db_performance_insights_retention_period_dev" {
+  description = "Database performance insights retention period"
+  type        = number
+  default    =   7                   
+}
+
+variable "db_create_monitoring_role_dev" {
+  description = "Database deletion protection"
+  type        = bool
+  default    =   true                    
+}
+
+variable "db_monitoring_interval_dev" {
+  description = "Database monitoring interval "
+  type        = number
+  default    =   60                   
+}
+
+variable "db_monitoring_role_name_dev" {
+  description = "Database monitoring role name"
+  type        =  string
+  default   ="example-monitoring-role-name"
+}
+
+variable "db_monitoring_role_description_dev" {
+  description = "monitoring_role_description"
+  type        =  string
+  default   = "Description for monitoring role"
+}
+
+## prod ##
+
+
+variable "db_identifier_prod" {
+  description = "Database name"
+  type        = string
+  default     = "webdb"
+}
+
+
+variable "db_engine_prod" {
+  description = "Database engine"
+  type        = string
+  default     ="postgres"
+}
+
+variable "db_engine_version_prod" {
+  description = "Database engine version"
+  type        = string
+  default     ="11.10"
+}
+
+variable "db_family_prod" {
+  description = "Database family"
+  type        = string
+  default    = "postgres11"
+}
+
+variable "db_major_engine_version_prod" {
+  description = "Database major engine version"
+  type        = string
+  default    = "11" 
+}
+
+variable "db_instance_class_prod" {
+  description = "Database instance class"
+  type        = string
+  default    =  "db.t3.large"  
+}
+
+variable "db_allocated_storage_prod" {
+  description = "Database allocated storage"
+  type        = number
+  default    =   20                    
+}
+
+variable "db_max_allocated_storage_prod" {
+  description = "Database max allocated storage"
+  type        = number
+  default    =   100                    
+}
+
+variable "db_storage_encrypted_prod" {
+  description = "Database storage encrypted"
+  type        = bool
+  default    =   false                    
+}
+
+variable "db_name_prod" {
+  description = "Database name"
+  type        =  string
+  default   =  "completePostgresql"
+}
+
+variable "db_username_prod" {
+  description = "Database username"
+  type        =  string
+  default   = "complete_postgresql"
+}
+
+variable "db_password_prod" {
+  description = "Database password"
+  type        =  string
+  default   = "YourPwdShouldBeLongAndSecure!"
+}
+
+variable "db_port_prod" {
+  description = "Database port"
+  type        = number
+  default    =   5432                    
+}
+
+variable "db_multi_az_prod" {
+  description = "Database multi available zone"
+  type        = bool
+  default    =   true                    
+}
+
+variable "db_maintenance_window_prod" {
+  description = "Database username"
+  type        =  string
+  default   = "Mon:00:00-Mon:03:00"
+}
+
+variable "db_backup_window_prod" {
+  description = "Database username"
+  type        =  string
+  default   = "03:00-06:00"
+}
+
+variable "db_enabled_cloudwatch_logs_exports_prod" {
+  description = "Database enabled cloudwatch logs exports"
+  type        =  list
+  default   = ["postgresql", "upgrade"]
+}
+
+variable "db_backup_retention_period_prod" {
+  description = "Database backup retention period"
+  type        = number
+  default    =   0                   
+}
+
+variable "db_skip_final_snapshot_prod" {
+  description = "Database skip final snapshot"
+  type        = bool
+  default    =   true                    
+}
+
+variable "db_deletion_protection_prod" {
+  description = "Database deletion protection"
+  type        = bool
+  default    =   false                    
+}
+
+variable "db_performance_insights_enabled_prod" {
+  description = "Database  performance insights enabled"
+  type        = bool
+  default    =   true                   
+}
+
+variable "db_performance_insights_retention_period_prod" {
+  description = "Database performance insights retention period"
+  type        = number
+  default    =   7                   
+}
+
+variable "db_create_monitoring_role_prod" {
+  description = "Database deletion protection"
+  type        = bool
+  default    =   true                    
+}
+
+variable "db_monitoring_interval_prod" {
+  description = "Database monitoring interval "
+  type        = number
+  default    =   60                   
+}
+
+variable "db_monitoring_role_name_prod" {
+  description = "Database monitoring role name"
+  type        =  string
+  default   ="example-monitoring-role-name"
+}
+
+variable "db_monitoring_role_description_prod" {
+  description = "monitoring_role_description"
+  type        =  string
+  default   = "Description for monitoring role"
+}
+
+
 
 
 

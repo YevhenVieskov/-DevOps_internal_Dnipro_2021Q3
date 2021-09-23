@@ -1,6 +1,6 @@
 resource "aws_launch_template" "web-app-template" {
-  name = "run-web-app"
-  #name_prefix   = "terraform-"
+  name = "${var.env}-run-web-app"
+  #name_prefix   = "${var.env}-"
   image_id      = data.aws_ami.ubuntu.id
   instance_type = var.instance_type
   key_name      = var.ssh_key_name  
@@ -30,7 +30,7 @@ module "asg" {
   desired_capacity          = 2
   wait_for_capacity_timeout = 0
   health_check_type         = "EC2"
-  vpc_zone_identifier       = module.vpc.public_subnets
+  vpc_zone_identifier       = module.vpc.private_subnets
 
   initial_lifecycle_hooks = [
     {
@@ -61,10 +61,10 @@ module "asg" {
   #lt_name                = "web-app-template"
   #description            = "Launch template example"
   #update_default_version = true
-
+  ##################################################
   use_lt    = true
   create_lt = false  
-  launch_template = aws_launch_template.web-app-template.name
+  launch_template = aws_launch_template.web-app-template.name  
 
   image_id          = data.aws_ami.ubuntu.id 
   instance_type     = var.instance_type
