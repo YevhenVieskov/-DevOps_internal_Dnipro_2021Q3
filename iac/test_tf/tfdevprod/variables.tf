@@ -13,7 +13,7 @@ variable "ssh_key_name" {
 variable "region" {
   description = "AWS Profile"
   type        = string
-  default     = "us-west-2"
+  default     = "us-east-2"
 }
 
 
@@ -33,7 +33,7 @@ variable "vpc_cidr" {
 
 variable "vpc_azs" {
   type = list
-  default = ["us-west-2a", "us-west-2b"]
+  default = ["us-east-2a", "us-east-2b"]
 }
 
 variable "vpc_private_subnets" {

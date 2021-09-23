@@ -7,7 +7,7 @@ module "public-asg" {
   # Launch configuration
   lc_name = var.lc_name_for_bastion_asg
 
-  image_id        = var.image_id_for_bastion_asg
+  image_id        = data.aws_ami.ubuntu.id
   instance_type   = var.instance_type_for_bastion_asg
   security_groups = [module.bastion-sg.security_group_id] 
 
@@ -43,7 +43,7 @@ module "private-asg" {
   # Launch configuration
   lc_name = var.lc_name_for_web_asg
 
-  image_id        = var.image_id_for_web_servers
+  image_id        = data.aws_ami.ubuntu.id
   instance_type   = var.instance_type_for_web_asg
   security_groups = [module.web-sg.security_group_id]
   user_data       = <<-EOF

@@ -20,7 +20,7 @@ module "vpc" {
   # Tags
   tags = var.tags
   
-  
+
 }
 
 
@@ -150,7 +150,7 @@ module "alb" {
       to_port     = 0
       protocol    = "-1"
       description = "lb outbound"
-      cidr_blocks = var.allowed_inbound_cidr_blocks
+      cidr_blocks = var.allowed_inbound_cidr_blocks #egress traffic to private netwok
       
     },
   ]

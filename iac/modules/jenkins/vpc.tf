@@ -40,24 +40,24 @@ module "jenkins_master_sg" {
     {
       rule        = "http-80-tcp"
       description = "From internet"
-      cidr_blocks = var.pub_b
+      cidr_blocks = "0.0.0.0/0"
     },
 
     {
       rule        = "http-8080-tcp"
       description = "From internet default jenkins port"
-      cidr_blocks = var.pub_b
+      cidr_blocks = "0.0.0.0/0"
     },
 
     {
       rule        = "https-443-tcp"
       description = "From internet https"
-      cidr_blocks = var.pub_b
+      cidr_blocks = "0.0.0.0/0"
     },
     {
       rule        = "ssh-tcp"
       description = "From internet ssh"
-      cidr_blocks = var.pub_b
+      cidr_blocks = "0.0.0.0/0"
     },
       
       
@@ -92,7 +92,7 @@ module "jenkins_slaves_sg" {
 
     {
       rule        = "ssh-tcp"
-      description = "From the office only"
+      description = "SSH from jenkins Master"
       cidr_blocks = var.pvt_b
     },
 
