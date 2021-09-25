@@ -9,10 +9,16 @@ module "vpcjk" {
   public_subnets  = [var.pub_a, var.pub_b]
   private_subnets = [var.pvt_a, var.pvt_b]
 
-  enable_dns_hostnames = true
+  /*enable_dns_hostnames = true
   enable_nat_gateway   = true
   single_nat_gateway   = true
+  enable_vpn_gateway   = false*/
+
+  /*enable_nat_gateway   = false
   enable_vpn_gateway   = false
+  create_igw           = true*/
+
+
 
   # Tags
   tags = var.tags
@@ -59,12 +65,10 @@ module "jenkins_master_sg" {
       description = "From internet ssh"
       cidr_blocks = "0.0.0.0/0"
     },
-      
-      
-    
+   
   ]
 
-  egress_with_cidr_blocks = [
+    egress_with_cidr_blocks = [
     {
       from_port   = 0
       to_port     = 0
@@ -108,12 +112,21 @@ module "jenkins_slaves_sg" {
 
   egress_with_cidr_blocks = [
     {
-      from_port   = 0
-      to_port     = 0
-      protocol    = "-1"
+      from_port   = var.jnlp_port
+      to_port     = var.jnlp_port
+      protocol    = "tcp"
       description = "Internet"
       cidr_blocks = "0.0.0.0/0"
     },
+
+    
+    
+    {
+      rule        = "ssh-tcp"
+      description = "SSH to jenkins Master"
+      cidr_blocks = var.pvt_b
+    },
+
   ]
 
   # Tags

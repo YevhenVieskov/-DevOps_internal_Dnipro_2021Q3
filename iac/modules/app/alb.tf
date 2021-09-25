@@ -8,7 +8,7 @@ module "app_alb" {
 
   vpc_id             = module.vpc.vpc_id
   subnets            = module.vpc.public_subnets
-  security_groups    = [module.web.security_group_id, module.bastion.security_group_id]
+  security_groups    = [module.alb.security_group_id]
 
   /*access_logs = {
     bucket = "my-alb-logs"

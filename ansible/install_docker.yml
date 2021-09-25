@@ -1,4 +1,6 @@
-- hosts: all
+---
+- hosts: jenkins_server
+  become: yes  
   roles:
-    - geerlingguy.docker
+    - role: install_docker
 

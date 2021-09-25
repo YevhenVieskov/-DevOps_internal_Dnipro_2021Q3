@@ -23,6 +23,7 @@ resource "aws_route53_record" "ns_record2" {
 
 
 
+
 #################
 # dev
 #################

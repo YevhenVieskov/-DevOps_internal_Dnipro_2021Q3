@@ -8,7 +8,7 @@ module "bastion" {
   source = "umotif-public/bastion/aws"
   #source = "./mbastion"
 
-  name_prefix = "${var.env}-"
+  name_prefix = "${var.env}"
 
   ami_id = data.aws_ami.ubuntu.id
   region = var.region
@@ -17,7 +17,7 @@ module "bastion" {
 
 
   vpc_id         = module.vpc.vpc_id
-  public_subnets = flatten([module.vpc.public_subnets])
+  public_subnets = module.vpc.public_subnets                                #flatten([module.vpc.public_subnets])
   
   hosted_zone_id = var.hosted_zone_id
   ssh_key_name   = var.ssh_key_name

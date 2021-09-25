@@ -13,7 +13,7 @@ resource "aws_launch_template" "web-app-template" {
   network_interfaces {
     associate_public_ip_address = true
     delete_on_termination       = true
-    security_groups             = [module.autoscaling.security_group_id]
+    security_groups             = [module.web.security_group_id]
   }
 }
 
@@ -31,6 +31,8 @@ module "asg" {
   wait_for_capacity_timeout = 0
   health_check_type         = "EC2"
   vpc_zone_identifier       = module.vpc.private_subnets
+  target_group_arns         = module.app_alb.target_group_arns
+
 
   initial_lifecycle_hooks = [
     {
@@ -120,24 +122,24 @@ module "asg" {
     http_put_response_hop_limit = 32
   }
 
-  network_interfaces = [
+  /*network_interfaces = [
     {
       delete_on_termination = true
       description           = "eth0"
       device_index          = 0
-      security_groups       = [module.autoscaling.security_group_id]
+      security_groups       = [module.web.security_group_id]
     },
     {
       delete_on_termination = true
       description           = "eth1"
       device_index          = 1
-      security_groups       = [module.autoscaling.security_group_id]
+      security_groups       = [module.web.security_group_id]
     }
-  ]
+  ]*/
 
-  placement = {
+  /*placement = {
     availability_zone = "${var.region}b"
-  }
+  }*/
 
   tag_specifications = [
     {
@@ -157,19 +159,19 @@ module "asg" {
   tags = [
     {
       key                 = "Environment"
-      value               = "dev"
+      value               = var.env
       propagate_at_launch = true
     },
     {
       key                 = "Project"
-      value               = "megasecret"
+      value               = "intermine"
       propagate_at_launch = true
     },
   ]
 
   tags_as_map = {
-    extra_tag1 = "extra_value1"
-    extra_tag2 = "extra_value2"
+    extra_tag1 = "YevhenVieskov"
+    extra_tag2 = "Final project"
   }
 }
 

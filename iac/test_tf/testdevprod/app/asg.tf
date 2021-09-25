@@ -97,7 +97,7 @@ resource "aws_launch_template" "web-app-template2" {
   }
 }*/
 
-module "asg" {
+module "private-asg" {
   source  = "terraform-aws-modules/autoscaling/aws"
   version = "~> 4.0"
 
@@ -110,6 +110,8 @@ module "asg" {
   wait_for_capacity_timeout = var.wait_for_capacity_timeout_for_web
   health_check_type         = var.health_check_type_for_web
   vpc_zone_identifier       = module.vpc.private_subnets
+
+  target_group_arns        = module.alb.target_group_arns
 
   initial_lifecycle_hooks = [
     {
@@ -173,7 +175,7 @@ module "asg" {
     }
   ]
 
-  capacity_reservation_specification = {
+  /*capacity_reservation_specification = {
     capacity_reservation_preference = "open"
   }
 
@@ -197,7 +199,7 @@ module "asg" {
     http_endpoint               = "enabled"
     http_tokens                 = "required"
     http_put_response_hop_limit = 32
-  }
+  }*/
 
   /*network_interfaces = [
     {

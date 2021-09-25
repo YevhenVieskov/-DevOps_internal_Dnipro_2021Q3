@@ -13,7 +13,7 @@ variable "ssh_key_name" {
 variable "region" {
   description = "AWS Profile"
   type        = string
-  default     = "us-west-2"
+  default     = "us-east-2"
 }
 
 
