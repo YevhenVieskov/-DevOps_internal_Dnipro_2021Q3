@@ -20,10 +20,10 @@ module "vpc" {
   #enable_nat_gateway   = false
   #enable_vpn_gateway   = false
 
-  enable_nat_gateway   = true
+  /*enable_nat_gateway   = true
   one_nat_gateway_per_az = true
   enable_vpn_gateway   = false
-  create_igw           = true
+  create_igw           = true*/
 
   # Tags
   tags = var.tags

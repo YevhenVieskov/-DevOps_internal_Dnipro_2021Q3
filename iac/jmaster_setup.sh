@@ -1,9 +1,29 @@
 #!/bin/bash
-sudo apt-get update
-sudo apt-get install -y apache2
-echo 'Hello from Terraform' > /var/www/html/index.html
-service httpd start
 
-sudo apt-get install -y stress-ng
+# Some sane options.
+set -e # Exit on first error.
+set -x # Print expanded commands to stdout.
 
-# sudo stress-ng --cpu 32 --timeout 180 --metrics-brief
+apt install -y git
+
+apt-add-repository -y ppa:ansible/ansible
+apt update
+apt install -y ansible
+
+ansible-galaxy install geerlingguy.java
+ansible-galaxy install geerlingguy.jenkins
+
+cd ~
+git clone https://github.com/YevhenVieskov/DevOps_internal_Dnipro_2021Q3.git
+cd ~/DevOps_internal_Dnipro_2021Q3
+cp -r jenkins_config     /var/lib/jenkins
+
+#install docker
+cp -r ~/DevOps_internal_Dnipro_2021Q3/ansible/install_docker ~/.ansible/roles
+cp  ~/DevOps_internal_Dnipro_2021Q3/ansible/install_docker.yml ~/.ansible/
+ansible-playbook ~/.ansible/install_docker.yml
+
+
+     
+        
+

@@ -27,9 +27,9 @@ pipeline {
     stage('Tools versions') {
       steps {
         sh '''
-          terraform version
+          terraform --version
           aws --version          
-          docker version
+          docker --version
         '''
       }
     }

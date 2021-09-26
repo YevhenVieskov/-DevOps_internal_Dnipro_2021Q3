@@ -1,5 +1,5 @@
 ---
-- hosts: jenkins_server
+- hosts: localhost
   become: yes  
   roles:
     - role: install_docker
