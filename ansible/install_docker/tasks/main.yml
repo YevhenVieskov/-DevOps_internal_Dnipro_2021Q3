@@ -55,6 +55,19 @@
   when: >
     docker_compose_current_version is not defined
     or docker_compose_current_version is version(docker_compose_version, '<')
+    
+# sudo groupadd docker
+- name: Create "docker" group
+  group:
+    name: "{{ docker_group }}"
+    state: present
+
+# sudo usermod -aG docker root
+- name: Add remote "ubuntu" user to "docker" group
+  user:
+    name: "{{ remote_user }}"
+    group: "{{ docker_group }}"
+    append: yes
 
         
       
