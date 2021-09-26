@@ -6,7 +6,7 @@
     java_packages:
       - openjdk-8-jdk
     jenkins_plugins:
-      [git, greenballs, ec2-plugin, aws-java-sdk, aws-credentials, authentication-tokens, copyartifact, gradle, junit, matrix-project, maven-plugin, pipeline-aws, locale, docker-workflow]
+      [git, greenballs, ec2-plugin, aws-java-sdk, aws-credentials, authentication-tokens, copyartifact, gradle, junit, matrix-project, maven-plugin, pipeline-aws, locale, docker-workflow, ssh, ssh-agent, publish-over-ssh, ssh-credentials, ssh-slaves, sshd]
       #- ec2-plugin
       #- name: ec2-plugin
       #  version: 1.64
