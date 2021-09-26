@@ -1,0 +1,24 @@
+<?xml version='1.1' encoding='UTF-8'?>
+<jenkins.branch.MultiBranchProject_-State plugin="branch-api@2.6.5">
+  <sourceActions>
+    <entry>
+      <string>af3d5a06-538f-4532-963e-438c898319b5</string>
+      <list>
+        <org.jenkinsci.plugins.github__branch__source.GitHubRepoMetadataAction plugin="github-branch-source@2.11.2"/>
+        <jenkins.scm.api.metadata.ObjectMetadataAction plugin="scm-api@2.6.5">
+          <objectDescription>A powerful open source data warehouse system</objectDescription>
+          <objectUrl>http://intermine.org</objectUrl>
+        </jenkins.scm.api.metadata.ObjectMetadataAction>
+        <org.jenkinsci.plugins.github__branch__source.GitHubLink plugin="github-branch-source@2.11.2">
+          <iconClassName>icon-github-repo</iconClassName>
+          <url>https://github.com/YevhenVieskov/intermine</url>
+        </org.jenkinsci.plugins.github__branch__source.GitHubLink>
+        <org.jenkinsci.plugins.github__branch__source.GitHubDefaultBranch plugin="github-branch-source@2.11.2">
+          <repoOwner>YevhenVieskov</repoOwner>
+          <repository>intermine</repository>
+          <defaultBranch>dev</defaultBranch>
+        </org.jenkinsci.plugins.github__branch__source.GitHubDefaultBranch>
+      </list>
+    </entry>
+  </sourceActions>
+</jenkins.branch.MultiBranchProject_-State>

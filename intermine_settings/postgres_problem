@@ -1,0 +1,262 @@
+password autentification failed
+
+
+If you have not tried this already, review your pg_hba.conf file. It will be named something like
+
+/etc/postgresql/9.6/main/pg_hba.conf # Ubuntu 16.04
+/var/lib/pgsql/9.3/data/pg_hba.conf # Fedora 20
+
+You may have to use find / -name pg_hba.conf to locate it.
+
+At the bottom of the file, change the METHOD values to trust for local testing (see postgres docs for full information). Restart postgres to ensure everything is started clean and the new params are read:
+
+sudo systemctl restart postgresql     # ubuntu
+
+Hopefully this will cure your woes. It solved my problems on Ubuntu/Fedora.
+
+
+
+Edit the file /etc/postgresql/8.4/main/pg_hba.conf and replace ident or peer by either md5 or trust, depending on whether you want it to ask for a password on your own computer or not. Then reload the configuration file with:
+
+/etc/init.d/postgresql reload
+
+Share
+Improve this answer
+Follow
+edited Jul 18 '13 at 21:44
+Jonathan
+11322 silver badges99 bronze badges
+answered Sep 23 '11 at 8:16
+Danny Milosavljevic
+1,70111 gold badge1010 silver badges22 bronze badges
+
+    4
+    one command restart postgresql: /etc/init.d/postgresql restart – 
+    Tyler Long
+    Nov 23 '11 at 2:44 
+
+14
+Why a restart when a reload is all you need? – 
+Frank Heikens
+Jan 15 '12 at 8:01
+In this case: "/etc/init.d/postgresql-8.4 reload" – 
+shaytac
+Oct 16 '12 at 2:48
+1
+this one here worked for me. Change from peer to md5 was enough. – 
+Jonatas CD
+Aug 20 '15 at 5:01
+1
+OK, I'm a postgresql noob, but I must report that only restart worked for me, not reload--- after changes to /etc/postgresql/9.5/main/pg_hba.conf (changing peer to trust). – 
+Mike O'Connor
+Feb 7 '17 at 5:52
+
+
+
+You're getting this error because you're failing client authentication. Based on the error message, you probably have the default postgres configuration, which sets client authentication method to "IDENT" for all PostgreSQL connections.
+
+You should definitely read section 19.1 Client Authentication in the PostgreSQL manual to better understand the authentication settings available (for each record in pg_hba.conf), but here is the relevant snippet to help with the problem you're having (from the version 9.5 manual):
+
+    trust
+
+    Allow the connection unconditionally. This method allows anyone that can connect to the PostgreSQL database server to login as any PostgreSQL user they wish, without the need for a password or any other authentication. See Section 19.3.1 for details.
+
+    reject
+
+    Reject the connection unconditionally. This is useful for "filtering out" certain hosts from a group, for example a reject line could block a specific host from connecting, while a later line allows the remaining hosts in a specific network to connect.
+
+    md5
+
+    Require the client to supply a double-MD5-hashed password for authentication. See Section 19.3.2 for details.
+
+    password
+
+    Require the client to supply an unencrypted password for authentication. Since the password is sent in clear text over the network, this should not be used on untrusted networks. See Section 19.3.2 for details.
+
+    gss
+
+    Use GSSAPI to authenticate the user. This is only available for TCP/IP connections. See Section 19.3.3 for details.
+
+    sspi
+
+    Use SSPI to authenticate the user. This is only available on Windows. See Section 19.3.4 for details.
+
+    ident
+
+    Obtain the operating system user name of the client by contacting the ident server on the client and check if it matches the requested database user name. Ident authentication can only be used on TCP/IP connections. When specified for local connections, peer authentication will be used instead. See Section 19.3.5 for details.
+
+    peer
+
+    Obtain the client's operating system user name from the operating system and check if it matches the requested database user name. This is only available for local connections. See Section 19.3.6 for details.
+
+    ldap
+
+    Authenticate using an LDAP server. See Section 19.3.7 for details.
+
+    radius
+
+    Authenticate using a RADIUS server. See Section 19.3.8 for details.
+
+    cert
+
+    Authenticate using SSL client certificates. See Section 19.3.9 for details.
+
+    pam
+
+    Authenticate using the Pluggable Authentication Modules (PAM) service provided by the operating system. See Section 19.3.10 for details.
+
+So ... to solve the problem you're experiencing, you could do one of the following:
+
+    Change the authentication method(s) defined in your pg_hba.conf file to trust, md5, or password (depending on your security and simplicity needs) for the local connection records you have defined in there.
+
+    Update pg_ident.conf to map your operating system users to PostgreSQL users and grant them the corresponding access privileges, depending on your needs.
+
+    Leave the IDENT settings alone and create users in your database for each operating system user that you want to grant access to. If a user is already authenticated by the OS and logged in, PostgreSQL won't require further authentication and will grant access to that user based on whatever privileges (roles) are assigned to it in the database. This is the default configuration.
+
+Note: The location of pg_hba.conf and pg_ident.conf is OS dependent.
+Share
+Improve this answer
+Follow
+edited Sep 22 '17 at 17:24
+Derek Mahar
+25.8k3939 gold badges119119 silver badges164164 bronze badges
+answered Jan 16 '14 at 15:55
+Leo Bedrosian
+3,39622 gold badges1616 silver badges2222 bronze badges
+
+    5
+    For me, this is the best answer. When you know all these options you can easily tweak the conf. And especially when you are on Dev machine you can simply set 'ident' for all entries to avoid wasting your time. Thanks – 
+    venkatareddy
+    Sep 29 '16 at 10:24
+    1
+    This was helpful for me too. In my case the pg_hba.conf file was set to peer, I changed it to password. Note that from a vanilla install I also had to set a password for the postgres user, sudo su - postgres psql, \password set a password. Then launch a default connection from pdgadmin3 with username postgres and your password you set. – 
+    edencorbin
+    Jan 30 '17 at 3:38
+    1
+    And where is that file found? Granted, you may need to make a list, since there seems to be no consistency between versions. I guess I'll just run find on '/' . – 
+    JosephK
+    Feb 6 '17 at 4:57
+    1
+    On Ubuntu-16.04 it's /etc/postgresql/9.6/main/pg_hba.conf. – 
+    Mike O'Connor
+    Feb 7 '17 at 5:59
+    1
+    As someone who is new to psql, this is a huge help and should be the accepted answer as it caters to various authentication methods – 
+    Vyrnach
+    Feb 28 '17 at 3:18
+
+Show 1 more comment
+48
+
+Simply adding the -h localhost bit was all mine required to work
+
+
+16
+
+I found a workable solution from a combination of several different sources on the web.
+
+Edit the configuration file
+
+nano /var/lib/pgsql/data/pg_hba.configuration
+
+Replace the first two ident's with md5, like so:
+
+# TYPE  DATABASE        USER            ADDRESS                 METHOD
+
+# "local" is for Unix domain socket connections only
+local   all             all                                     md5
+# IPv4 local connections:
+host    all             all             127.0.0.1/32            md5
+# IPv6 local connections:
+host    all             all             ::1/128                 md5
+# Allow replication connections from localhost, by a user with the
+# replication privilege.
+#local   replication     postgres                                peer
+#host    replication     postgres        127.0.0.1/32            ident
+#host    replication     postgres        ::1/128                 ident
+
+Save file.
+
+Then, restart the server
+
+sudo systemctl restart postgresql
+
+Lastly, grant all privileges on database testdb to hduser;
+Share
+Improve this answer
+Follow
+answered Jul 16 '18 at 9:44
+usr
+71411 gold badge88 silver badges2525 bronze badges
+
+    1
+    Ah, thanks. An update for newer users: you might need sudo service postgresql-XX.service restart (where XX is your Postgres release, 11 in my case) instead than sudo systemctl restart postgresql – 
+    Giampaolo Ferradini
+    May 3 '20 at 23:23
+    In some versions, the file is located at nano /var/lib/pgsql/data/pg_hba.conf – 
+    Amos Korir
+    Jan 8 at 7:48 
+
+Add a comment
+Report this ad
+2
+
+Check the log file in (for CentOS, probably in /var/lib/pgsql/data/pg_log) for more details.
+
+If the user doesn't exist, create it. With psql, you can create a user like:
+
+create role hduser with login, superuser;
+
+Or from the command line:
+
+createuser -s -e hduser
+
+If identd is not installed, install it:
+
+yum install authd xinetd
+
+Then edit /etc/xinet.d/auth and change disable = yes to disable = no:
+
+service auth 
+{ 
+        disable = no 
+        socket_type = stream 
+        ....
+}
+
+And restart the xinetd service:
+
+systemctl restart xinetd
+
+Resolution
+
+By default PostgreSQL uses IDENT-based authentication and this will never allow you to login via -U and -W options. Allow username and password based authentication from your application by appling 'trust' as the authentication method for the Bitbucket database user. You can do this by modifying the pg_hba.conf file.
+
+You can identify the location of the pg_hba.conf file by running the following command in psql command line, you'll need to be logged in as a superuser in the database:
+
+postgres=# show hba_file ;
+ hba_file
+--------------------------------------
+ /etc/postgresql/9.3/main/pg_hba.conf
+(1 row)
+
+
+This file controls:
+
+    Which hosts are allowed to connect
+    How clients are authenticated
+    Which PostgreSQL user names they can use
+    Which databases they can access
+
+ 
+
+For example:
+
+ 
+
+local	all	all	trust
+host	all	127.0.0.1/32	trust
+
+Don't forget to restart PostgreSQL after saving your changes to the file.
+# service postgresql restart
+

@@ -1,0 +1,69 @@
+module "classic_load_balancer" {
+  source  = "infrablocks/classic-load-balancer/aws"
+  version = "0.1.7"
+
+  region = var.region
+  vpc_id = module.vpc.vpc_id
+  subnet_ids = join(concat(module.vpc.private_subnets, module.vpc.public_subnets)) # "subnet-ae4533c4,subnet-443e6b12"
+  
+  component = "important-component"
+  deployment_identifier = "production"
+  
+  domain_name = var.domain_name
+  public_zone_id = var.public_zone_id
+  private_zone_id = var.private_zone_id
+  
+  listeners = [
+    {
+      lb_port = 443
+      lb_protocol = "HTTPS"
+      instance_port = 443
+      instance_protocol = "HTTPS"
+      ssl_certificate_id = ssl_certificate_id
+    },
+    {
+      lb_port = 80
+      lb_protocol = "HTTP"
+      instance_port = 80
+      instance_protocol = "HTTP"
+    }
+  ]
+  
+  access_control = [
+    {
+      lb_port = 443
+      instance_port = 443
+      allow_cidr = "0.0.0.0/0"
+    },
+    {
+      lb_port = 80
+      instance_port = 80
+      allow_cidr = "0.0.0.0/0"
+    }
+  ]
+  
+  egress_cidrs = "10.0.0.0/8"
+  
+  health_check_target = "HTTPS:443/ping"
+  health_check_timeout = 10
+  health_check_interval = 30
+  health_check_unhealthy_threshold = 5
+  health_check_healthy_threshold = 5
+
+  enable_cross_zone_load_balancing = "yes"
+
+  enable_connection_draining = "yes"
+  connection_draining_timeout = 60
+
+  idle_timeout = 60
+
+  include_public_dns_record = "yes"
+  include_private_dns_record = "yes"
+
+  expose_to_public_internet = "yes"
+}
+
+
+
+
+
