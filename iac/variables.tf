@@ -101,17 +101,7 @@ variable "jsname" {
   default     = "jenkins-slave"
 }
 
-variable "alb_name_dev" {
-  description = "Name of jenkins master"
-  type        = string
-  default     = "alb-app-dev"
-}
 
-variable "alb_name_prod" {
-  description = "Name of jenkins master"
-  type        = string
-  default     = "alb-app-prod"
-}
 
 
 
@@ -326,6 +316,127 @@ variable "udata_asg_prod" {
   description = "Name to be used for the Jenkins master instance"
   type        = string
   default     = "./prod_setup.sh"
+}
+
+#################
+# ALB
+#################
+
+variable "alb_name_dev" {
+  description = "Name of jenkins master"
+  type        = string
+  default     = "alb-app-dev"
+}
+
+variable "alb_name_prod" {
+  description = "Name of jenkins master"
+  type        = string
+  default     = "alb-app-prod"
+}
+
+
+variable "load_balancer_type" {
+  default = "application"
+}
+
+variable "backend_protocol" {
+  default = "HTTP"
+}
+
+variable "backend_port" {
+  default = 80
+}
+
+variable "target_type" {
+  default = "instance"
+}
+
+variable "interval_for_alb" {
+  default = 30
+}
+
+variable "healthy_threshold" {
+  default = 3
+}
+
+variable "unhealthy_threshold" {
+  default = 3
+}
+
+variable "timeout_for_alb" {
+  default = 6
+}
+
+variable "protocol_for_alb" {
+  default = "HTTP"
+}
+
+variable "matcher_for_alb" {
+  default = "200-399"
+}
+
+variable "http_tcp_listeners_port" {
+  default = 80
+}
+
+variable "http_tcp_listeners_protocol" {
+  default = "HTTP"
+}
+
+variable "http_tcp_listeners_target_group_index" {
+  default = 0
+}
+
+#################
+# ASG
+#################
+
+variable "name_for_web_instances" {
+  default = "ec-web-server"
+}
+
+variable "lc_name_for_web_asg" {
+  default = "lc-for-web-srv-sg"
+}
+
+/*variable "image_id_for_web_servers" {
+  default = "ami-0a91cd140a1fc148a"
+}*/
+
+variable "instance_type_for_web_asg" {
+  default = "t2.micro"
+}
+
+variable "volume_size_for_web_asg" {
+  default = "10"
+}
+
+variable "volume_type_for_web_asg" {
+  default = "gp2"
+}
+
+variable "asg_name_web" {
+  default = "web-asg"
+}
+
+variable "health_check_type_for_web" {
+  default = "EC2"
+}
+
+variable "min_size_for_web" {
+  default = 2
+}
+
+variable "max_size_for_web" {
+  default = 4
+}
+
+variable "desired_capacity_for_web" {
+  default = 2
+}
+
+variable "wait_for_capacity_timeout_for_web" {
+  default = 0
 }
 
 #################

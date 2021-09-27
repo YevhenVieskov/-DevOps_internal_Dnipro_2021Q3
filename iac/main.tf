@@ -54,23 +54,62 @@ module "dev"{
   ###################
   # Network variables
   ###################
-  region = var.region_dev  
-  env                  = var.env_dev
-  domain_name          = var.domain_name
-  zone_name            = "${var.env_dev}.${aws_route53_zone.main.name}"
-  zone_id              = aws_route53_zone.main.zone_id
-  hosted_zone_id       = aws_route53_zone.main.zone_id
-  create_certificate   = var.create_certificate_dev
-  wait_for_validation  = var.wait_for_validation_dev
-  alb_name             = var.alb_name_dev
-  instance_type        = var.instance_type_dev
-  vpc_cidr             = var.vpc_cidr_dev
-  pub_a                = var.pub_a_dev
-  pub_b                = var.pub_b_dev
-  pvt_a                = var.pvt_a_dev
-  pvt_b                = var.pvt_b_dev
-  ssh_key_name         = var.ssh_key_name 
-  udata_asg            = file("${path.module}/${var.udata_dev}")
+  region                                   = var.region_dev  
+  env                                      = var.env_dev
+  domain_name                              = var.domain_name
+  zone_name                                = "${var.env_dev}.${aws_route53_zone.main.name}"
+  zone_id                                  = aws_route53_zone.main.zone_id
+  hosted_zone_id                           = aws_route53_zone.main.zone_id
+  create_certificate                       = var.create_certificate_dev
+  wait_for_validation                      = var.wait_for_validation_dev
+
+  #################
+  # ALB
+  #################
+  alb_name                                 = var.alb_name_dev
+  load_balancer_type                       = var.load_balancer_type 
+  backend_protocol                         = var.backend_protocol
+  backend_port                             = var.backend_port
+  target_type                              = var.target_type
+  interval_for_alb                         = var.interval_for_alb 
+  healthy_threshold                        = var.healthy_threshold 
+  unhealthy_threshold                      = var.unhealthy_threshold
+  timeout_for_alb                          = var.timeout_for_alb
+  protocol_for_alb                         = var.protocol_for_alb 
+  matcher_for_alb                          = var.matcher_for_alb
+  http_tcp_listeners_port                  = var.http_tcp_listeners_port
+  http_tcp_listeners_protocol              = var.http_tcp_listeners_protocol
+  http_tcp_listeners_target_group_index    = var.http_tcp_listeners_target_group_index  
+
+  #################
+  # ASG
+  #################
+
+  name_for_web_instances                     = var.name_for_web_instances 
+  lc_name_for_web_asg                        = var.lc_name_for_web_asg
+  instance_type_for_web_asg                  = var.instance_type_for_web_asg
+  volume_size_for_web_asg                    = var.volume_size_for_web_asg 
+  volume_type_for_web_asg                    = var.volume_type_for_web_asg 
+  asg_name_web                               = var.asg_name_web
+  health_check_type_for_web                  = var.health_check_type_for_web
+  min_size_for_web                           = var.min_size_for_web 
+  max_size_for_web                           = var.max_size_for_web
+  desired_capacity_for_web                   = var.desired_capacity_for_web 
+  wait_for_capacity_timeout_for_web          = var.wait_for_capacity_timeout_for_web
+  udata_asg                                  = file("${path.module}/${var.udata_dev}")
+  
+
+  #################
+  # Network
+  #################
+  instance_type                              = var.instance_type_dev
+  vpc_cidr                                   = var.vpc_cidr_dev
+  pub_a                                      = var.pub_a_dev
+  pub_b                                      = var.pub_b_dev
+  pvt_a                                      = var.pvt_a_dev
+  pvt_b                                      = var.pvt_b_dev
+  ssh_key_name                               = var.ssh_key_name 
+  
 
   #################
   # Database
@@ -113,23 +152,62 @@ module "dev"{
 
 module "prod"{
   source  = "./modules/app"
-  region = var.region_prod  
-  env                  = var.env_prod
-  domain_name          = var.domain_name
-  zone_name            = "${var.env_prod}.${aws_route53_zone.main.name}"
-  zone_id              = aws_route53_zone.main.zone_id
-  hosted_zone_id       = aws_route53_zone.main.zone_id
-  create_certificate   = var.create_certificate_prod
-  wait_for_validation  = var.wait_for_validation_prod
-  alb_name             = var.alb_name_prod
-  instance_type        = var.instance_type_prod
-  vpc_cidr             = var.vpc_cidr_prod
-  pub_a                = var.pub_a_prod
-  pub_b                = var.pub_b_prod
-  pvt_a                = var.pvt_a_prod
-  pvt_b                = var.pvt_b_prod
-  ssh_key_name         = var.ssh_key_name 
-  udata_asg            = file("${path.module}/${var.udata_prod}")
+  region                                   = var.region_prod  
+  env                                      = var.env_prod
+  domain_name                              = var.domain_name
+  zone_name                                = "${var.env_prod}.${aws_route53_zone.main.name}"
+  zone_id                                  = aws_route53_zone.main.zone_id
+  hosted_zone_id                           = aws_route53_zone.main.zone_id
+  create_certificate                       = var.create_certificate_prod
+  wait_for_validation                      = var.wait_for_validation_prod
+
+  #################
+  # ALB
+  #################
+  alb_name                                 = var.alb_name_prod  
+  load_balancer_type                       = var.load_balancer_type 
+  backend_protocol                         = var.backend_protocol
+  backend_port                             = var.backend_port
+  target_type                              = var.target_type
+  interval_for_alb                         = var.interval_for_alb 
+  healthy_threshold                        = var.healthy_threshold 
+  unhealthy_threshold                      = var.unhealthy_threshold
+  timeout_for_alb                          = var.timeout_for_alb
+  protocol_for_alb                         = var.protocol_for_alb 
+  matcher_for_alb                          = var.matcher_for_alb
+  http_tcp_listeners_port                  = var.http_tcp_listeners_port
+  http_tcp_listeners_protocol              = var.http_tcp_listeners_protocol
+  http_tcp_listeners_target_group_index    = var.http_tcp_listeners_target_group_index 
+
+  #################
+  # ASG
+  #################
+
+  name_for_web_instances                     = var.name_for_web_instances 
+  lc_name_for_web_asg                        = var.lc_name_for_web_asg
+  instance_type_for_web_asg                  = var.instance_type_for_web_asg
+  volume_size_for_web_asg                    = var.volume_size_for_web_asg 
+  volume_type_for_web_asg                    = var.volume_type_for_web_asg 
+  asg_name_web                               = var.asg_name_web
+  health_check_type_for_web                  = var.health_check_type_for_web
+  min_size_for_web                           = var.min_size_for_web 
+  max_size_for_web                           = var.max_size_for_web
+  desired_capacity_for_web                   = var.desired_capacity_for_web 
+  wait_for_capacity_timeout_for_web          = var.wait_for_capacity_timeout_for_web
+  udata_asg                                  = file("${path.module}/${var.udata_prod}")
+  
+  
+  #################
+  # Network
+  #################
+  instance_type                            = var.instance_type_prod
+  vpc_cidr                                 = var.vpc_cidr_prod
+  pub_a                                    = var.pub_a_prod
+  pub_b                                    = var.pub_b_prod
+  pvt_a                                    = var.pvt_a_prod
+  pvt_b                                    = var.pvt_b_prod
+  ssh_key_name                             = var.ssh_key_name 
+  
 
   #################
   # Database

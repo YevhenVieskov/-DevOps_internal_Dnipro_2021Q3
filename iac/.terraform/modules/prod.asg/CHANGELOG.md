@@ -7,55 +7,6 @@ All notable changes to this project will be documented in this file.
 
 
 
-<a name="v4.6.0"></a>
-## [v4.6.0] - 2021-09-02
-
-- feat: Add support for `warm_pool` ([#142](https://github.com/terraform-aws-modules/terraform-aws-autoscaling/issues/142))
-- docs: Updated description of user_data and user_data_base64 ([#161](https://github.com/terraform-aws-modules/terraform-aws-autoscaling/issues/161))
-
-
-<a name="v4.5.0"></a>
-## [v4.5.0] - 2021-08-25
-
-- feat: Added throughput parameter for root and ebs block devices ([#160](https://github.com/terraform-aws-modules/terraform-aws-autoscaling/issues/160))
-
-
-<a name="v4.4.0"></a>
-## [v4.4.0] - 2021-06-12
-
-- feat: Control propagation of the ASG Name tag to instances ([#152](https://github.com/terraform-aws-modules/terraform-aws-autoscaling/issues/152))
-
-
-<a name="v4.3.0"></a>
-## [v4.3.0] - 2021-06-11
-
-- fix: Fix instance refresh ([#151](https://github.com/terraform-aws-modules/terraform-aws-autoscaling/issues/151))
-
-
-<a name="v4.2.0"></a>
-## [v4.2.0] - 2021-06-02
-
-- feat: Adding autoscaling schedule ([#150](https://github.com/terraform-aws-modules/terraform-aws-autoscaling/issues/150))
-- chore: update CI/CD to use stable `terraform-docs` release artifact and discoverable Apache2.0 license ([#146](https://github.com/terraform-aws-modules/terraform-aws-autoscaling/issues/146))
-- chore: Updated versions&comments in examples ([#145](https://github.com/terraform-aws-modules/terraform-aws-autoscaling/issues/145))
-
-
-<a name="v4.1.0"></a>
-## [v4.1.0] - 2021-04-08
-
-- fix: add tags to launch template ([#141](https://github.com/terraform-aws-modules/terraform-aws-autoscaling/issues/141))
-
-
-<a name="v4.0.0"></a>
-## [v4.0.0] - 2021-04-08
-
-- feat: update module to include launch template support, mixed instances policy, instance refresh, etc. ([#139](https://github.com/terraform-aws-modules/terraform-aws-autoscaling/issues/139))
-- chore: update documentation and pin `terraform_docs` version to avoid future changes ([#138](https://github.com/terraform-aws-modules/terraform-aws-autoscaling/issues/138))
-- chore: align ci-cd static checks to use individual minimum Terraform versions ([#134](https://github.com/terraform-aws-modules/terraform-aws-autoscaling/issues/134))
-- chore: only run validate check on min terraform version ([#133](https://github.com/terraform-aws-modules/terraform-aws-autoscaling/issues/133))
-- chore: add ci-cd workflow for pre-commit checks ([#131](https://github.com/terraform-aws-modules/terraform-aws-autoscaling/issues/131))
-
-
 <a name="v3.9.0"></a>
 ## [v3.9.0] - 2021-02-20
 
@@ -278,14 +229,7 @@ All notable changes to this project will be documented in this file.
 - Initial commit
 
 
-[Unreleased]: https://github.com/terraform-aws-modules/terraform-aws-autoscaling/compare/v4.6.0...HEAD
-[v4.6.0]: https://github.com/terraform-aws-modules/terraform-aws-autoscaling/compare/v4.5.0...v4.6.0
-[v4.5.0]: https://github.com/terraform-aws-modules/terraform-aws-autoscaling/compare/v4.4.0...v4.5.0
-[v4.4.0]: https://github.com/terraform-aws-modules/terraform-aws-autoscaling/compare/v4.3.0...v4.4.0
-[v4.3.0]: https://github.com/terraform-aws-modules/terraform-aws-autoscaling/compare/v4.2.0...v4.3.0
-[v4.2.0]: https://github.com/terraform-aws-modules/terraform-aws-autoscaling/compare/v4.1.0...v4.2.0
-[v4.1.0]: https://github.com/terraform-aws-modules/terraform-aws-autoscaling/compare/v4.0.0...v4.1.0
-[v4.0.0]: https://github.com/terraform-aws-modules/terraform-aws-autoscaling/compare/v3.9.0...v4.0.0
+[Unreleased]: https://github.com/terraform-aws-modules/terraform-aws-autoscaling/compare/v3.9.0...HEAD
 [v3.9.0]: https://github.com/terraform-aws-modules/terraform-aws-autoscaling/compare/v3.8.0...v3.9.0
 [v3.8.0]: https://github.com/terraform-aws-modules/terraform-aws-autoscaling/compare/v3.7.0...v3.8.0
 [v3.7.0]: https://github.com/terraform-aws-modules/terraform-aws-autoscaling/compare/v3.6.0...v3.7.0

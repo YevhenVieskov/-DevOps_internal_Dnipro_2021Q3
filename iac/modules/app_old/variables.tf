@@ -251,57 +251,10 @@ variable "http_tcp_listeners_target_group_index" {
 }
 
 
-#################
-# ASG
-#################
 
-variable "name_for_web_instances" {
-  default = "ec-web-server"
-}
 
-variable "lc_name_for_web_asg" {
-  default = "lc-for-web-srv-sg"
-}
 
-/*variable "image_id_for_web_servers" {
-  default = "ami-0a91cd140a1fc148a"
-}*/
 
-variable "instance_type_for_web_asg" {
-  default = "t2.micro"
-}
-
-variable "volume_size_for_web_asg" {
-  default = "10"
-}
-
-variable "volume_type_for_web_asg" {
-  default = "gp2"
-}
-
-variable "asg_name_web" {
-  default = "web-asg"
-}
-
-variable "health_check_type_for_web" {
-  default = "EC2"
-}
-
-variable "min_size_for_web" {
-  default = 2
-}
-
-variable "max_size_for_web" {
-  default = 4
-}
-
-variable "desired_capacity_for_web" {
-  default = 2
-}
-
-variable "wait_for_capacity_timeout_for_web" {
-  default = 0
-}
 
 
 
