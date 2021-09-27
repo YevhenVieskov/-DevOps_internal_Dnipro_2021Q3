@@ -9,8 +9,8 @@ module "vpc" {
   private_subnets = [var.pvt_a, var.pvt_b]
   #database_subnets = [var.pvt_a, var.pvt_b]
 
-  enable_nat_gateway = false
-  enable_vpn_gateway = false
+  /*enable_nat_gateway = false
+  enable_vpn_gateway = false*/
 
   enable_dns_hostnames = true
   /*enable_nat_gateway   = true  

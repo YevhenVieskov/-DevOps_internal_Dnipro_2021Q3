@@ -27,16 +27,16 @@ pipeline {
     stage('Tools versions') {
       steps {
         sh '''
-          terraform version
+          terraform --version
           aws --version          
-          docker version
+          docker --version
         '''
       }
     }
 
     stage('Initialisation network and security related infrastructure with TF') {
       steps {
-        withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', accessKeyVariable: 'AWS_ACCESS_KEY_ID', credentialsId: 'aws-creds', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]) {
+        withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', accessKeyVariable: 'AWS_ACCESS_KEY_ID', credentialsId: 'vieskovtf', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]) {
           sh '''
             echo "#---> Initialisation and validation network infrastructure with TF..."
             cd ${WORKSPACE}/$iac
@@ -49,15 +49,12 @@ pipeline {
 
     stage('Create network and security related infrastructure with TF') {
       steps {
-        withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', accessKeyVariable: 'AWS_ACCESS_KEY_ID', credentialsId: 'aws-creds', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]) {
+        withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', accessKeyVariable: 'AWS_ACCESS_KEY_ID', credentialsId: 'vieskovtf', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]) {
           sh '''
             echo "#---> Create network and security network infrastructure with TF..."
             cd ${WORKSPACE}/$iac            
-            terraform apply -target aws_route53_zone.main
-            terraform plan -out=$plan_file -var "aws_region=${AWS_DEFAULT_REGION}" \
-              -var "aws_access_key=${AWS_ACCESS_KEY_ID}" \
-	            -var "aws_secret_key=${AWS_SECRET_ACCESS_KEY}"
-            terraform apply -input=false $plan_file
+            terraform apply -target aws_route53_zone.main -auto-approve           
+            terraform apply -auto-approve
           '''
         }
       }
@@ -69,7 +66,7 @@ pipeline {
 
     stage('Destroy network and security related infrastructure with TF') {
       steps {
-        withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', accessKeyVariable: 'AWS_ACCESS_KEY_ID', credentialsId: 'aws-creds', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]) {
+        withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', accessKeyVariable: 'AWS_ACCESS_KEY_ID', credentialsId: 'vieskovtf', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]) {
           sh '''
             echo "#---> Destroy network and security related infrastructure with TF..."
             cd ${WORKSPACE}/$iac
