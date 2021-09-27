@@ -25,7 +25,7 @@ cp  ~/DevOps_internal_Dnipro_2021Q3/ansible/install_docker.yml ~/.ansible/
 ansible-playbook ~/.ansible/install_docker.yml
 #install Jenkins config and jobs
 cd ~/DevOps_internal_Dnipro_2021Q3
-cp -r jenkins_config     /var/lib/jenkins
+cp -r jenkins_config/*     /var/lib/jenkins
 #add jenkins to docker group
 usermod -aG docker jenkins
 reboot
