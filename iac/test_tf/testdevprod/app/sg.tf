@@ -6,7 +6,7 @@ module "db-sg" {
   vpc_id      = module.vpc.vpc_id
 
   ingress_cidr_blocks = [module.vpc.vpc_cidr_block]
-  ingress_rules       = ["mysql-tcp", "ssh-tcp"]
+  ingress_rules       = ["postgresql-tcp", "ssh-tcp"]
   egress_rules        = ["all-all"]
 }
 

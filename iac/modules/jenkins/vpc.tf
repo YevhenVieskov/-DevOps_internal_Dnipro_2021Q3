@@ -18,8 +18,8 @@ module "vpcjk" {
   enable_vpn_gateway   = false
   create_igw           = true*/
 
-  enable_nat_gateway = false
-  enable_vpn_gateway = false
+  #enable_nat_gateway = false
+  #enable_vpn_gateway = false
 
   # Tags
   tags = var.tags

@@ -10,9 +10,10 @@ module "vpc" {
   private_subnets = [var.pvt_a, var.pvt_b]
   #database_subnets = [var.pvt_a, var.pvt_b]
 
-
-  /*enable_dns_hostnames = true
-  enable_nat_gateway   = true
+  
+  
+  enable_dns_hostnames = true
+  /*enable_nat_gateway   = true
   single_nat_gateway   = false #true
   enable_vpn_gateway   = true
   one_nat_gateway_per_az = true*/
@@ -122,7 +123,7 @@ module "alb" {
     },    
   ]
 
-  #egress_rules = ["all-all"]
+  egress_rules = ["all-all"]
 
   # Tags
   tags =  merge(var.tags, { Name = "ALB" })
