@@ -396,7 +396,7 @@ variable "http_tcp_listeners_target_group_index" {
 #################
 
 variable "name_for_web_instances" {
-  default = "ec-web-server"
+  default = "-web-server"
 }
 
 variable "lc_name_for_web_asg" {
@@ -408,11 +408,11 @@ variable "lc_name_for_web_asg" {
 }*/
 
 variable "instance_type_for_web_asg" {
-  default = "t2.large"
+  default = "t2.micro"
 }
 
 variable "volume_size_for_web_asg" {
-  default = "10"
+  default = "20"
 }
 
 variable "volume_type_for_web_asg" {
