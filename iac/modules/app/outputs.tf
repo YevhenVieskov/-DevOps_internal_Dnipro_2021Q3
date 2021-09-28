@@ -1,3 +1,17 @@
+output "lb_dns_name" {
+  description = "The DNS name of the load balancer."
+  value       = module.app_alb.lb_dns_name
+}
+
+output "autoscaling_group_id" {
+  description = "The autoscaling group id"
+  value       = module.asg.this_autoscaling_group_id
+}
+
+
+
+
+
 output "vpc_id" {
   description = "ID of the VPC"
   value       = module.vpc.vpc_id

@@ -1,0 +1,10 @@
+commit 6b342e8913ede127e45ad17f93b519ee0e29bb13
+tree 225ad0bfec4d9d0fcced204ce9e9e591fe63b78c
+parent 5f7404aa3cb845e0fc8523b2d29c03af60ebc987
+author YevhenVieskov <evveskov@gmail.com> 2021-09-28 10:49:15 +0300
+committer YevhenVieskov <evveskov@gmail.com> 2021-09-28 10:49:15 +0300
+
+    remove second sudo
+
+
+:100644 100644 eae5ba9880a0cbe970d42cd4cd78c0a6008af5f7 e99a8f9c42351e229a4a4ba1baccf90ec29bf481 M	Jenkinsfile

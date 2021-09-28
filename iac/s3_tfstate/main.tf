@@ -85,7 +85,7 @@ data "aws_iam_policy_document" "terraform_storage_state_access" {
     }*/
 
     resources = [
-      "${aws_s3_bucket.terraform_state_storage.arn}/terraform.tfstate"
+      "${aws_s3_bucket.terraform_state_storage.arn}/terraform.tfstate",      
     ]
   }
 }

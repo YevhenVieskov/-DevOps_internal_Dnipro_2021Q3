@@ -1,0 +1,26 @@
+<?xml version='1.1' encoding='UTF-8'?>
+<Tag plugin="workflow-support@3.8">
+  <node class="cps.n.StepAtomNode" plugin="workflow-cps@2.94">
+    <parentIds>
+      <string>159</string>
+    </parentIds>
+    <id>160</id>
+    <descriptorId>org.jenkinsci.plugins.workflow.steps.durable_task.ShellStep</descriptorId>
+  </node>
+  <actions>
+    <cps.a.ArgumentsActionImpl plugin="workflow-cps@2.94">
+      <arguments>
+        <entry>
+          <string>script</string>
+          <string>ssh -o StrictHostKeyChecking=no  vieskov@192.168.0.104 &quot;rm -rf docker-intermine-gradle/ &amp;&amp; git clone https://github.com/YevhenVieskov/docker-intermine-gradle.git &amp;&amp; cd docker-intermine-gradle &amp;&amp; ./mkdatadirs.sh dockerhub.docker-compose.yml &amp;&amp; chmod -R 777 data/solr &amp;&amp; docker-compose -f dockerhub.docker-compose.yml up -d&quot;</string>
+        </entry>
+      </arguments>
+      <sensitiveVariables/>
+      <isUnmodifiedBySanitization>true</isUnmodifiedBySanitization>
+    </cps.a.ArgumentsActionImpl>
+    <wf.a.TimingAction plugin="workflow-api@2.46">
+      <startTime>1632815455951</startTime>
+    </wf.a.TimingAction>
+    <s.a.LogStorageAction/>
+  </actions>
+</Tag>

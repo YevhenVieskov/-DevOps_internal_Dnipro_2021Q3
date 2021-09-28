@@ -1,0 +1,13 @@
+<?xml version='1.1' encoding='UTF-8'?>
+<fingerprint>
+  <timestamp>2021-09-26 07:53:50.91 UTC</timestamp>
+  <md5sum>97c29483c4c5383e23e7c638d64218a4</md5sum>
+  <fileName>Credential id=vieskovtf name=AKIAQYSNWACA7H5QOI3C (vieskovtf)</fileName>
+  <usages>
+    <entry>
+      <string>infrastructure</string>
+      <ranges>13</ranges>
+    </entry>
+  </usages>
+  <facets/>
+</fingerprint>

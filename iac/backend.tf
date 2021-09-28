@@ -3,8 +3,9 @@
   backend "s3" {
     bucket         = "vieskovtf-tfstate-bucket"
     key            = "terraform.tfstate"                   // "app/terraform.tfstate"
-    region         = var.region
+    region         = "us-east-2"
     encrypt        = true
     dynamodb_table = "vieskovtf-tfstate-lock-table"
   }
 }*/
+
