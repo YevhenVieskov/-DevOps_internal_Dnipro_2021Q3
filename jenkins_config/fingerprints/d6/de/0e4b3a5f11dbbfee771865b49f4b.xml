@@ -1,0 +1,33 @@
+<?xml version='1.1' encoding='UTF-8'?>
+<fingerprint>
+  <timestamp>2021-09-14 09:24:07.111 UTC</timestamp>
+  <md5sum>d6de0e4b3a5f11dbbfee771865b49f4b</md5sum>
+  <fileName>Credential id=github_key name=YevhenVieskov/****** (GitHub Key)</fileName>
+  <usages>
+    <entry>
+      <string>intermine-docker-gradle</string>
+      <ranges>29-40</ranges>
+    </entry>
+    <entry>
+      <string>infrastructure</string>
+      <ranges>13</ranges>
+    </entry>
+  </usages>
+  <facets>
+    <com.cloudbees.plugins.credentials.fingerprints.ItemCredentialsFingerprintFacet plugin="credentials@2.6.1">
+      <timestamp>1632661159079</timestamp>
+      <itemFullName>intermine_docker</itemFullName>
+      <timestamp0>1632660777157</timestamp0>
+    </com.cloudbees.plugins.credentials.fingerprints.ItemCredentialsFingerprintFacet>
+    <com.cloudbees.plugins.credentials.fingerprints.ItemCredentialsFingerprintFacet plugin="credentials@2.6.1">
+      <timestamp>1632675144074</timestamp>
+      <itemFullName>infrastructure</itemFullName>
+      <timestamp0>1632643825070</timestamp0>
+    </com.cloudbees.plugins.credentials.fingerprints.ItemCredentialsFingerprintFacet>
+    <com.cloudbees.plugins.credentials.fingerprints.ItemCredentialsFingerprintFacet plugin="credentials@2.6.1">
+      <timestamp>1632815389619</timestamp>
+      <itemFullName>intermine-docker-gradle</itemFullName>
+      <timestamp0>1632815099034</timestamp0>
+    </com.cloudbees.plugins.credentials.fingerprints.ItemCredentialsFingerprintFacet>
+  </facets>
+</fingerprint>

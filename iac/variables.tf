@@ -379,6 +379,10 @@ variable "http_tcp_listeners_port" {
   default = 80
 }
 
+variable "im_docker_listeners_port" {
+  default = 9999
+}
+
 variable "http_tcp_listeners_protocol" {
   default = "HTTP"
 }

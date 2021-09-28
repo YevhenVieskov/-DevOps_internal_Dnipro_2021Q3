@@ -77,6 +77,7 @@ module "dev"{
   timeout_for_alb                          = var.timeout_for_alb
   protocol_for_alb                         = var.protocol_for_alb 
   matcher_for_alb                          = var.matcher_for_alb
+  im_docker_listeners_port                 = var.im_docker_listeners_port
   http_tcp_listeners_port                  = var.http_tcp_listeners_port
   http_tcp_listeners_protocol              = var.http_tcp_listeners_protocol
   http_tcp_listeners_target_group_index    = var.http_tcp_listeners_target_group_index  
@@ -175,6 +176,7 @@ module "prod"{
   timeout_for_alb                          = var.timeout_for_alb
   protocol_for_alb                         = var.protocol_for_alb 
   matcher_for_alb                          = var.matcher_for_alb
+  im_docker_listeners_port                 = var.im_docker_listeners_port
   http_tcp_listeners_port                  = var.http_tcp_listeners_port
   http_tcp_listeners_protocol              = var.http_tcp_listeners_protocol
   http_tcp_listeners_target_group_index    = var.http_tcp_listeners_target_group_index 

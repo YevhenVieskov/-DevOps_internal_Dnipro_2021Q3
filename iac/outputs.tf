@@ -1,4 +1,36 @@
-output "vpc_id" {
+output "public_ip_jm" {
+  description = "The public IP address assigned to the instance, if applicable."
+  value       = module.jenkins.public_ip_jm
+}
+
+output "public_ip_js" {
+  description = "The public IP address assigned to the instance, if applicable."
+  value       = module.jenkins.public_ip_js
+}
+
+output "dev_lb_dns_name" {
+  description = "The DNS name of the load balancer."
+  value       = module.dev.lb_dns_name
+}
+
+output "dev_autoscaling_group_id" {
+  description = "The autoscaling group id"
+  value       = module.dev.autoscaling_group_id
+}
+
+output "prod_lb_dns_name" {
+  description = "The DNS name of the load balancer."
+  value       = module.dev.lb_dns_name
+}
+
+output "prod_autoscaling_group_id" {
+  description = "The autoscaling group id"
+  value       = module.dev.autoscaling_group_id
+}
+
+
+
+/*output "vpc_id" {
   description = "ID of the VPC"
   value       = module.jenkins.vpc_id
 }
@@ -11,7 +43,9 @@ output "public_subnets" {
 output "private_subnets" {
   description = "ID of the VPC private subnet"
   value       = module.jenkins.private_subnets
-}
+  }*/
+
+
 
 
   

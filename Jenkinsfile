@@ -59,6 +59,20 @@ pipeline {
         }
       }
     }
+	
+	stage('Create list of output variables with TF') {
+      steps {
+        withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', accessKeyVariable: 'AWS_ACCESS_KEY_ID', credentialsId: 'vieskovtf', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]) {
+          sh '''
+            echo "#---> Create network and security network infrastructure with TF..."
+            cd ${WORKSPACE}/$iac        
+                       
+            terraform output
+			terraform output -json
+          '''
+        }
+      }
+    }
     
     stage("Approve") {
       steps { approve('Do you want to destroy your infrastructure?') }
@@ -85,100 +99,12 @@ pipeline {
 } //pipeline
 
 
-
-
-/*
-
-//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-try {
-  stage('checkout') {
-    node {
-      cleanWs()
-      checkout scm
-    }
-  }
-
-  // Run terraform init
-  stage('init') {
-    node {
-      withCredentials([[
-        $class: 'AmazonWebServicesCredentialsBinding',
-        credentialsId: credentialsId,
-        accessKeyVariable: 'AWS_ACCESS_KEY_ID',
-        secretKeyVariable: 'AWS_SECRET_ACCESS_KEY'
-      ]]) {
-        ansiColor('xterm') {
-          sh 'terraform init'
-        }
-      }
-    }
-  }
-
-  // Run terraform plan
-  stage('plan') {
-    node {
-      withCredentials([[
-        $class: 'AmazonWebServicesCredentialsBinding',
-        credentialsId: credentialsId,
-        accessKeyVariable: 'AWS_ACCESS_KEY_ID',
-        secretKeyVariable: 'AWS_SECRET_ACCESS_KEY'
-      ]]) {
-        ansiColor('xterm') {
-          sh 'terraform plan'
-        }
-      }
-    }
-  }
-
-  if (env.BRANCH_NAME == 'master') {
-
-    // Run terraform apply
-    stage('apply') {
-      node {
-        withCredentials([[
-          $class: 'AmazonWebServicesCredentialsBinding',
-          credentialsId: credentialsId,
-          accessKeyVariable: 'AWS_ACCESS_KEY_ID',
-          secretKeyVariable: 'AWS_SECRET_ACCESS_KEY'
-        ]]) {
-          ansiColor('xterm') {
-            sh 'terraform apply -auto-approve'
-          }
-        }
-      }
-    }
-
-    // Run terraform show
-    stage('show') {
-      node {
-        withCredentials([[
-          $class: 'AmazonWebServicesCredentialsBinding',
-          credentialsId: credentialsId,
-          accessKeyVariable: 'AWS_ACCESS_KEY_ID',
-          secretKeyVariable: 'AWS_SECRET_ACCESS_KEY'
-        ]]) {
-          ansiColor('xterm') {
-            sh 'terraform show'
-          }
-        }
-      }
-    }
-  }
-  currentBuild.result = 'SUCCESS'
-}
-catch (org.jenkinsci.plugins.workflow.steps.FlowInterruptedException flowError) {
-  currentBuild.result = 'ABORTED'
-}
-catch (err) {
-  currentBuild.result = 'FAILURE'
-  throw err
-}
-finally {
-  if (currentBuild.result == 'SUCCESS') {
-    currentBuild.result = 'SUCCESS'
-  }
+def approve(msg) {
+	timeout(time:1, unit:'DAYS') {
+		input(msg)     
+	}
 }
 
-*/
+
 
 

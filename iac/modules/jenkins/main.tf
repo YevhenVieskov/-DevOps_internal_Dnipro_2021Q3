@@ -16,11 +16,11 @@ module "jmaster_instance" {
   #user_data = var.userdata_file_content != "" ? base64encode(var.userdata_file_content) : 
   #base64encode(templatefile("${path.module}/bastion-userdata.sh", { HOSTED_ZONE_ID = var.hosted_zone_id, NAME_PREFIX = var.name_prefix }))
 
-  root_block_device {
+  /*root_block_device {
     volume_type           = "gp2"
     volume_size           = 30
     delete_on_termination = false
-  }
+  }*/
 
   tags = {
     Terraform   = "true"
@@ -45,11 +45,11 @@ module "jslave_instance" {
 
   user_data              = var.udata_jslave != "" ? base64encode(var.udata_jslave) : base64encode(file(var.udata_jslave)) 
 
-  root_block_device {
+  /*root_block_device {
     volume_type           = "gp2"
     volume_size           = 30
     delete_on_termination = false
-  }
+  }*/
 
   tags = {
     Terraform   = "true"

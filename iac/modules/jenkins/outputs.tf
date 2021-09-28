@@ -1,3 +1,15 @@
+output "public_ip_jm" {
+  description = "The public IP address assigned to the instance, if applicable."
+  value       = module.jmaster_instance.public_ip
+}
+
+output "public_ip_js" {
+  description = "The public IP address assigned to the instance, if applicable."
+  value       = module.jslave_instance.public_ip
+}
+
+
+
 output "vpc_id" {
   description = "ID of the VPC"
   value       = module.vpcjk.vpc_id
@@ -12,6 +24,8 @@ output "private_subnets" {
   description = "ID of the VPC private subnet"
   value       = module.vpcjk.private_subnets
 }
+
+
 
 
 /*output "sg_id" {

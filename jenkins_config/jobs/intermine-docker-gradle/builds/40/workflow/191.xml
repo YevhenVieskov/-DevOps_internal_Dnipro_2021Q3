@@ -1,0 +1,27 @@
+<?xml version='1.1' encoding='UTF-8'?>
+<Tag plugin="workflow-support@3.8">
+  <node class="cps.n.StepStartNode" plugin="workflow-cps@2.94">
+    <parentIds>
+      <string>190</string>
+    </parentIds>
+    <id>191</id>
+    <descriptorId>org.jenkinsci.plugins.workflow.support.steps.StageStep</descriptorId>
+  </node>
+  <actions>
+    <wf.a.BodyInvocationAction plugin="workflow-api@2.46"/>
+    <wf.a.LabelAction plugin="workflow-api@2.46">
+      <displayName>Delete Container on Dev Environment</displayName>
+    </wf.a.LabelAction>
+    <wf.a.TimingAction plugin="workflow-api@2.46">
+      <startTime>1632816935932</startTime>
+    </wf.a.TimingAction>
+    <wf.a.TagsAction plugin="workflow-api@2.46">
+      <tags>
+        <entry>
+          <string>STAGE_STATUS</string>
+          <string>SKIPPED_FOR_FAILURE</string>
+        </entry>
+      </tags>
+    </wf.a.TagsAction>
+  </actions>
+</Tag>

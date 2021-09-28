@@ -27,9 +27,9 @@ apt-get update && apt-get upgrade
 apt-get  install -y  maven
 
 #install gradle
-add-apt-repository ppa:cwchien/gradle
+add-apt-repository -y  ppa:cwchien/gradle
 apt-get update
-apt-get install gradle
+apt-get install -y gradle
 
 ansible-galaxy install geerlingguy.java
 ansible-galaxy install geerlingguy.jenkins
