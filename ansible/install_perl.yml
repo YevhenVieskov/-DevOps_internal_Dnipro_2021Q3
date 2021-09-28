@@ -1,0 +1,12 @@
+- hosts: localhost
+  roles:
+    - role: blackstar257.perl
+      perl_cpanm_modules:
+        - JSON
+        - libxml-writer-perl 
+        - libxml-sax-base-perl 
+        - libxml-perl 
+        - libxml-filter-saxt-perl 
+        - libtext-glob-perl
+
+

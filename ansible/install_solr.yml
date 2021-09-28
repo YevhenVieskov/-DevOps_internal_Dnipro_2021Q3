@@ -1,0 +1,6 @@
+- hosts: solr-servers
+  roles:
+    - geerlingguy.java
+    - geerlingguy.solr
+
+

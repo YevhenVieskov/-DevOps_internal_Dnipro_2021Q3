@@ -1,9 +1,23 @@
-#!/bin/bash
-sudo apt-get update
-sudo apt-get install -y apache2
-echo 'Hello from Terraform' > /var/www/html/index.html
-service httpd start
+#!bin/bash
+#set -e # Exit on first error
+set -x # Print expanded commands to stdout
 
-sudo apt-get install -y stress-ng
+#install git
+apt install -y git
 
-# sudo stress-ng --cpu 32 --timeout 180 --metrics-brief
+#install ansible
+apt-add-repository -y ppa:ansible/ansible
+apt update
+apt install -y ansible
+
+
+ansible-galaxy install geerlingguy.java
+
+
+cd ~
+git clone https://github.com/YevhenVieskov/DevOps_internal_Dnipro_2021Q3.git
+
+#install Java
+cp  ~/DevOps_internal_Dnipro_2021Q3/ansible/install_java.yml ~/.ansible/
+ansible-playbook ~/.ansible/install_java.yml
+
