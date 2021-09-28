@@ -1,28 +1,28 @@
 Id,Name,Shape Library,Page ID,Contained By,Group,Line Source,Line Destination,Source Arrow,Destination Arrow,Text Area 1
 1,Page,,,,,,,,,Page 1
-2,Virtual Private Cloud,AWS Architecture 2019,1,11,,,,,,Virtual Private Cloud Prod
-3,Public Subnet,AWS Architecture 2019,1,2|4|9|11,,,,,,Public Subnet 1
-4,Security Group,AWS Architecture 2019,1,2|11,,,,,,Prod  Bastion Security Group
+2,Virtual Private Cloud,AWS Architecture 2019,1,11,,,,,,Virtual Private Cloud Dev
+3,Public Subnet,AWS Architecture 2019,1,2|4|9|11,,,,,,Public Subnet 
+4,Security Group,AWS Architecture 2019,1,2|11,,,,,,Bastion Security Group
 5,Private Subnet,AWS Architecture 2019,1,2|9|11,,,,,,Private Subnet
 6,Private Subnet,AWS Architecture 2019,1,2|10|11,,,,,,Private Subnet
-7,Public Subnet,AWS Architecture 2019,1,2|4|10|11,,,,,,Public Subnet 1
+7,Public Subnet,AWS Architecture 2019,1,2|4|10|11,,,,,,Public Subnet 
 8,Auto Scaling,AWS Architecture 2019,1,2|4|11,,,,,,Auto Scaling
 9,Availability Zone,AWS Architecture 2019,1,2|11,,,,,,Availability Zone A
 10,Availability Zone,AWS Architecture 2019,1,2|11,,,,,,Availability Zone B
 11,Region,AWS Architecture 2019,1,,,,,,,us-east-2
-12,Virtual Private Cloud,AWS Architecture 2019,1,11,,,,,,Virtual Private Cloud Master
-13,Public Subnet,AWS Architecture 2019,1,11|12|14,,,,,,Public Subnet 1
-14,Security Group,AWS Architecture 2019,1,11|12,,,,,,Jenkins Master Security Group
+12,Virtual Private Cloud,AWS Architecture 2019,1,11,,,,,,Virtual Private Cloud  Jenkins
+13,Public Subnet,AWS Architecture 2019,1,11|12,,,,,,Public Subnet Jenkins Main
+14,Security Group,AWS Architecture 2019,1,11|12|13,,,,,,Jenkins Main Security Group
 15,Auto Scaling,AWS Architecture 2019,1,2|5|9|11|17,,,,,,Auto Scaling
 16,Auto Scaling,AWS Architecture 2019,1,2|6|10|11|17,,,,,,Auto Scaling
 17,Security Group,AWS Architecture 2019,1,2|11,,,,,,Application Security Group
 18,Security Group,AWS Architecture 2019,1,2|11,,,,,,Data Base Security Group
 19,Virtual Private Cloud,AWS Architecture 2019,1,11,,,,,,Virtual Private Cloud Prod
-20,Public Subnet,AWS Architecture 2019,1,11|19|21|26,,,,,,Public Subnet 1
-21,Security Group,AWS Architecture 2019,1,11|19,,,,,,Prod  Bastion Security Group
+20,Public Subnet,AWS Architecture 2019,1,11|19|21|26,,,,,,Public Subnet 
+21,Security Group,AWS Architecture 2019,1,11|19,,,,,,Bastion Security Group
 22,Private Subnet,AWS Architecture 2019,1,11|19|26,,,,,,Private Subnet
 23,Private Subnet,AWS Architecture 2019,1,11|19|27,,,,,,Private Subnet
-24,Public Subnet,AWS Architecture 2019,1,11|19|21|27,,,,,,Public Subnet 1
+24,Public Subnet,AWS Architecture 2019,1,11|19|21|27,,,,,,Public Subnet 
 25,Auto Scaling,AWS Architecture 2019,1,11|19|21,,,,,,Auto Scaling
 26,Availability Zone,AWS Architecture 2019,1,11|19,,,,,,Availability Zone A
 27,Availability Zone,AWS Architecture 2019,1,11|19,,,,,,Availability Zone B
@@ -30,67 +30,49 @@ Id,Name,Shape Library,Page ID,Contained By,Group,Line Source,Line Destination,So
 29,Auto Scaling,AWS Architecture 2019,1,11|19|23|27|30,,,,,,Auto Scaling
 30,Security Group,AWS Architecture 2019,1,11|19,,,,,,Application Security Group
 31,Security Group,AWS Architecture 2019,1,11|19,,,,,,Data Base Security Group
-32,NAT gateway,AWS Architecture 2019,1,2|3|4|9|11,,,,,,NAT gateway
-33,Internet gateway,AWS Architecture 2019,1,2|11,,,,,,Internet gateway
-34,Route table,AWS Architecture 2019,1,2|4|11,,,,,,Route table
-35,Text,Standard,1,2|11,,,,,,10.0.0.0/16
+32,Private Subnet,AWS Architecture 2019,1,11|12,,,,,,Private Subnet Jenkins Worker
+33,NAT gateway,AWS Architecture 2019,1,2|3|4|9|11,,,,,,NAT gateway
+34,Internet gateway,AWS Architecture 2019,1,2|11,,,,,,Internet gateway
+35,Route table,AWS Architecture 2019,1,2|4|11,,,,,,Route table
 36,Amazon RDS,AWS Architecture 2019,1,2|5|9|11|18,,,,,,Amazon RDS Postgre SQL
 37,Amazon RDS,AWS Architecture 2019,1,2|6|10|11|18,,,,,,Amazon RDS Postgre SQL 
 38,NAT gateway,AWS Architecture 2019,1,2|4|7|10|11,,,,,,NAT gateway
-39,Text,Standard,1,2|4|7|10|11,,,,,,10.0.144.0/20
-40,Text,Standard,1,2|6|10|11,,,,,,10.0.32.0/19
-41,T2 Instance,AWS Architecture 2019,1,11|12|13|14,,,,,,Jenkins Main EC2
-42,Internet gateway,AWS Architecture 2019,1,11|12,,,,,,Internet gateway
-43,Route table,AWS Architecture 2019,1,11|12|14,,,,,,Route table
-44,Text,Standard,1,11|12,,,,,,10.0.0.0/16
-45,Peering,AWS Architecture 2019,1,11,,,,,,Peering
-46,T3 Instance,AWS Architecture 2019,1,11|12|13|14,,,,,,Jenkins Worker
-47,AWS General User,AWS Architecture 2019,1,,,,,,,Dev
-48,Amazon CloudWatch,AWS Architecture 2019,1,,,,,,,Amazon CloudWatch
-49,Amazon SNS,AWS Architecture 2017,1,,,,,,,Amazon SNS
-50,SES email,AWS Architecture 2017,1,,,,,,,email
-51,Circle,Geometric Shapes,1,,,,,,,
-52,Text,Standard,1,,,,,,,Git
-53,Text,Standard,1,2|3|4|9|11,,,,,,10.0.144.0/20
-54,Application Load Balancer,AWS Architecture 2019,1,2|11,,,,,,Application Load Balancer
-55,T2 Instance,AWS Architecture 2019,1,2|3|4|8|9|11,,,,,,Linux Bastion Host
-56,Text,Standard,1,2|5|9|11,,,,,,10.0.32.0/19
-57,T2 Instance,AWS Architecture 2019,1,2|6|10|11|16|17,,,,,,T2 Instance
-58,T2 Instance,AWS Architecture 2019,1,2|4|7|8|10|11,,,,,,Linux Bastion Host
-59,T2 Instance,AWS Architecture 2019,1,2|5|9|11|15|17,,,,,,T2 Instance
-60,Elastic Load Balancing,AWS Architecture 2019,1,2|11,,,,,,Elastic Load Balancing
-61,AWS General Users,AWS Architecture 2019,1,11,,,,,,Admins
-62,Amazon Route 53,AWS Architecture 2019,1,11,,,,,,Amazon Route 53
-63,NAT gateway,AWS Architecture 2019,1,11|19|20|21|26,,,,,,NAT gateway
-64,Internet gateway,AWS Architecture 2019,1,11|19,,,,,,Internet gateway
-65,Route table,AWS Architecture 2019,1,11|19|21,,,,,,Route table
-66,Text,Standard,1,11|19,,,,,,10.0.0.0/16
-67,Amazon RDS,AWS Architecture 2019,1,11|19|22|26|31,,,,,,Amazon RDS Postgre SQL
-68,Amazon RDS,AWS Architecture 2019,1,11|19|23|27|31,,,,,,Amazon RDS Postgre SQL 
-69,NAT gateway,AWS Architecture 2019,1,11|19|21|24|27,,,,,,NAT gateway
-70,Text,Standard,1,11|19|21|24|27,,,,,,10.0.144.0/20
-71,Text,Standard,1,11|19|23|27,,,,,,10.0.32.0/19
-72,Text,Standard,1,11|19|20|21|26,,,,,,10.0.144.0/20
-73,Application Load Balancer,AWS Architecture 2019,1,11|19,,,,,,Application Load Balancer
-74,T2 Instance,AWS Architecture 2019,1,11|19|20|21|25|26,,,,,,Linux Bastion Host
-75,Text,Standard,1,11|19|22|26,,,,,,10.0.32.0/19
-76,T2 Instance,AWS Architecture 2019,1,11|19|23|27|29|30,,,,,,T2 Instance
-77,T2 Instance,AWS Architecture 2019,1,11|19|21|24|25|27,,,,,,Linux Bastion Host
-78,T2 Instance,AWS Architecture 2019,1,11|19|22|26|28|30,,,,,,T2 Instance
-79,Elastic Load Balancing,AWS Architecture 2019,1,11|19,,,,,,Elastic Load Balancing
-80,AWS General Users,AWS Architecture 2019,1,11,,,,,,Developers
-81,Amazon Route 53,AWS Architecture 2019,1,11,,,,,,Amazon Route 53
-82,Line,,1,,,41,46,None,Arrow,
-83,Line,,1,,,47,48,None,Arrow,
-84,Line,,1,,,48,49,None,Arrow,
-85,Line,,1,,,49,50,None,Arrow,
-86,Line,,1,,,47,42,None,Arrow,
-87,Line,,1,,,51,41,None,Arrow,
-88,Line,,1,,,47,51,None,Arrow,
-89,Line,,1,,,45,12,Arrow,None,
-90,Line,,1,,,45,2,None,Arrow,
-91,Line,,1,,,61,62,None,Arrow,
-92,Line,,1,,,62,33,None,Arrow,
-93,Line,,1,,,80,81,None,Arrow,
-94,Line,,1,,,81,64,None,Arrow,
-95,Line,,1,,,45,19,None,Arrow,
+39,T2 Instance,AWS Architecture 2019,1,11|12|13|14,,,,,,Jenkins Main EC2
+40,Internet gateway,AWS Architecture 2019,1,11|12,,,,,,Internet gateway
+41,Route table,AWS Architecture 2019,1,11|12,,,,,,Route table
+42,Peering,AWS Architecture 2019,1,11,,,,,,Peering
+43,T3 Instance,AWS Architecture 2019,1,11|12|32,,,,,,Jenkins Worker
+44,AWS General User,AWS Architecture 2019,1,,,,,,,Dev
+45,Circle,Geometric Shapes,1,,,,,,,
+46,Text,Standard,1,,,,,,,Git
+47,Application Load Balancer,AWS Architecture 2019,1,2|11,,,,,,Application Load Balancer
+48,T2 Instance,AWS Architecture 2019,1,2|3|4|8|9|11,,,,,,Linux Bastion Host
+49,T2 Instance,AWS Architecture 2019,1,2|6|10|11|16|17,,,,,,T2 Instance
+50,T2 Instance,AWS Architecture 2019,1,2|4|7|8|10|11,,,,,,Linux Bastion Host
+51,T2 Instance,AWS Architecture 2019,1,2|5|9|11|15|17,,,,,,T2 Instance
+52,AWS General Users,AWS Architecture 2019,1,11,,,,,,Admins
+53,Amazon Route 53,AWS Architecture 2019,1,11,,,,,,Amazon Route 53
+54,NAT gateway,AWS Architecture 2019,1,11|19|20|21|26,,,,,,NAT gateway
+55,Internet gateway,AWS Architecture 2019,1,11|19,,,,,,Internet gateway
+56,Route table,AWS Architecture 2019,1,11|19|21,,,,,,Route table
+57,Amazon RDS,AWS Architecture 2019,1,11|19|22|26|31,,,,,,Amazon RDS Postgre SQL
+58,Amazon RDS,AWS Architecture 2019,1,11|19|23|27|31,,,,,,Amazon RDS Postgre SQL 
+59,NAT gateway,AWS Architecture 2019,1,11|19|21|24|27,,,,,,NAT gateway
+60,Application Load Balancer,AWS Architecture 2019,1,11|19,,,,,,Application Load Balancer
+61,T2 Instance,AWS Architecture 2019,1,11|19|20|21|25|26,,,,,,Linux Bastion Host
+62,T2 Instance,AWS Architecture 2019,1,11|19|23|27|29|30,,,,,,T2 Instance
+63,T2 Instance,AWS Architecture 2019,1,11|19|21|24|25|27,,,,,,Linux Bastion Host
+64,T2 Instance,AWS Architecture 2019,1,11|19|22|26|28|30,,,,,,T2 Instance
+65,AWS General Users,AWS Architecture 2019,1,11,,,,,,Developers
+66,Amazon Route 53,AWS Architecture 2019,1,11,,,,,,Amazon Route 53
+67,Line,,1,,,39,43,None,Arrow,
+68,Line,,1,,,44,40,None,Arrow,
+69,Line,,1,,,45,14,None,Arrow,
+70,Line,,1,,,44,45,None,Arrow,
+71,Line,,1,,,42,12,Arrow,None,
+72,Line,,1,,,42,2,None,Arrow,
+73,Line,,1,,,52,53,None,Arrow,
+74,Line,,1,,,53,34,None,Arrow,
+75,Line,,1,,,65,66,None,Arrow,
+76,Line,,1,,,66,55,None,Arrow,
+77,Line,,1,,,42,19,None,Arrow,

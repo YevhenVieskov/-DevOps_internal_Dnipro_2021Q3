@@ -408,7 +408,7 @@ variable "lc_name_for_web_asg" {
 }*/
 
 variable "instance_type_for_web_asg" {
-  default = "t2.micro"
+  default = "t2.large"
 }
 
 variable "volume_size_for_web_asg" {

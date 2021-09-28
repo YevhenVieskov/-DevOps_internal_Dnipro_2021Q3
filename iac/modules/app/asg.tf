@@ -10,13 +10,13 @@ module "asg" {
   image_id        = data.aws_ami.ubuntu.id
   instance_type   = var.instance_type_for_web_asg
   security_groups = [module.web.security_group_id]
-  user_data       = var.udata_asg != "" ? base64encode(var.udata_asg) : base64encode(file(var.udata_asg))
-  /*user_data       = <<-EOF
+  #user_data       = var.udata_asg != "" ? base64encode(var.udata_asg) : base64encode(file(var.udata_asg))
+  user_data       = <<-EOF
                 #!/bin/bash
                 ec2ip=$(curl http://169.254.169.254/latest/meta-data/local-ipv4)
                 echo "<html> <body bgcolor=0FA2B6><center><h1><p><font color=White>$ec2ip</h1><center></body></html>" > index.html
                 nohup busybox httpd -f -p 80 &
-                EOF*/
+                EOF
 
   root_block_device = [
     {
