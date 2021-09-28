@@ -1,8 +1,6 @@
-#!/bin/bash
-
-# Some sane options.
-set -e # Exit on first error.
-set -x # Print expanded commands to stdout.
+#!bin/bash
+#set -e # Exit on first error
+set -x # Print expanded commands to stdout
 
 #install git
 apt install -y git
@@ -14,36 +12,24 @@ apt install -y ansible
 
 #install jq
 apt update
-install jq
+apt install -y  jq
 
 #install make
 apt-get update
-apt-get install -y  make
+apt-get install -y make
 
 #install gcc
-sudo apt update && sudo apt dist-upgrade
-sudo apt install -y  build-essential
-
-#gcc variant
-#add-apt-repository -y ppa:ubuntu-toolchain-r/test && sudo apt update
-#sudo apt -y install gcc-snapshot && sudo apt -y install gcc-11g++-11
-
-#gcc variant 2
-#sudo apt-get install -y software-properties-common
-#sudo add-apt-repository ppa:ubuntu-toolchain-r/test
-#sudo apt update
-#sudo apt install g++-7 -y
+apt update && apt dist-upgrade -y
+apt install -y build-essential
 
 #install maven
-apt-get update && apt-get upgrage
-apt-get -y install maven
+apt-get update && apt-get upgrade
+apt-get  install -y  maven
 
 #install gradle
 add-apt-repository ppa:cwchien/gradle
 apt-get update
 apt-get install gradle
-
-
 
 ansible-galaxy install geerlingguy.java
 ansible-galaxy install geerlingguy.jenkins
@@ -68,11 +54,10 @@ cp -r jenkins_config/*     /var/lib/jenkins
 #add jenkins to docker group
 usermod -aG docker jenkins
 
+cp  ~/DevOps_internal_Dnipro_2021Q3/ansible/install_solr.yml ~/.ansible/
+cp  ~/DevOps_internal_Dnipro_2021Q3/ansible/install_perl.yml ~/.ansible/
 
+ansible-playbook ~/.ansible/install_solr.yml
+ansible-playbook ~/.ansible/install_perl.yml
 
-reboot
-
-
-     
-        
-
+reboot 
