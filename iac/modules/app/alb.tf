@@ -60,11 +60,11 @@ module "app_alb" {
       target_group_index = var.http_tcp_listeners_target_group_index
     },
 
-    {
+    /*{
       port               = var.im_docker_listeners_port
       protocol           = var.http_tcp_listeners_protocol
       target_group_index = var.http_tcp_listeners_target_group_index
-    },
+    },*/
 
 
   ]
