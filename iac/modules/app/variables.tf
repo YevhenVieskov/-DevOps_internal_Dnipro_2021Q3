@@ -366,20 +366,20 @@ variable "db_storage_encrypted" {
 variable "db_name" {
   description = "Database name"
   type        =  string
-  default   =  "completePostgresql"
+  #default   =  "completePostgresql"
 }
 
 
 variable "db_username" {
   description = "Database username"
   type        =  string
-  default   = "complete_postgresql"
+  #default   = "complete_postgresql"
 }
 
 variable "db_password" {
   description = "Database password"
   type        =  string
-  default   = "YourPwdShouldBeLongAndSecure!"
+  #default   = "YourPwdShouldBeLongAndSecure!"
 }
 
 variable "db_port" {

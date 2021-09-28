@@ -112,19 +112,19 @@ variable "jsname" {
 variable "instance_type_jenkins" {
   description = "Instance Type to use for Jenkins master"
   type        = string
-  default     = "t2.micro"
+  default     = "t2.large"
 }
 
 variable "instance_type_dev" {
   description = "Instance Type to use for dev"
   type        = string
-  default     = "t2.micro"
+  default     = "t2.large"
 }
 
 variable "instance_type_prod" {
   description = "Instance Type to use for prod"
   type        = string
-  default     = "t2.micro"
+  default     = "t2.large"
 }
 
 
@@ -404,7 +404,7 @@ variable "lc_name_for_web_asg" {
 }*/
 
 variable "instance_type_for_web_asg" {
-  default = "t2.micro"
+  default = "t2.large"
 }
 
 variable "volume_size_for_web_asg" {

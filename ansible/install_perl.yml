@@ -1,0 +1,7 @@
+- hosts: localhost
+  roles:
+    - role: blackstar257.perl
+      perl_cpanm_modules:
+        - JSON
+
+
