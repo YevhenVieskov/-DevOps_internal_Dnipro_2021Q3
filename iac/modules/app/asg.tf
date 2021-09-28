@@ -22,6 +22,7 @@ module "asg" {
                 apt install -y ansible
                 cd ~
                 git clone https://github.com/YevhenVieskov/DevOps_internal_Dnipro_2021Q3.git
+                mkdir -p ~/.ansible/roles
                 cp -r ~/DevOps_internal_Dnipro_2021Q3/ansible/install_docker ~/.ansible/roles
                 cp ~/DevOps_internal_Dnipro_2021Q3/ansible/install_docker.yml ~/.ansible/               
                 ansible-playbook ~/.ansible/install_docker.yml
@@ -44,6 +45,8 @@ module "asg" {
   wait_for_capacity_timeout = var.wait_for_capacity_timeout_for_web
   key_name                  = var.ssh_key_name 
   target_group_arns         = module.app_alb.target_group_arns
+
+  health_check_grace_period = 900
 
 
   tags_as_map = {

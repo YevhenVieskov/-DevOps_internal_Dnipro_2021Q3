@@ -227,7 +227,7 @@ variable "unhealthy_threshold" {
 }
 
 variable "timeout_for_alb" {
-  default = 6
+  default = 15
 }
 
 variable "protocol_for_alb" {
