@@ -84,11 +84,8 @@ pipeline {
           sh '''
             echo "#---> Destroy network and security related infrastructure with TF..."
             cd ${WORKSPACE}/$iac
-            terraform init && terraform validate
-            terraform plan -out=$plan_file -var "aws_region=${AWS_DEFAULT_REGION}" \
-              -var "aws_access_key=${AWS_ACCESS_KEY_ID}" \
-	            -var "aws_secret_key=${AWS_SECRET_ACCESS_KEY}"
-            terraform destroy -input=false $plan_file
+            
+            terraform destroy -auto-approve
           '''
         }
       }
