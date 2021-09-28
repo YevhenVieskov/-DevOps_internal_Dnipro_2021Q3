@@ -14,8 +14,27 @@ apt install -y ansible
 apt update
 apt install -y  jq
 
+#install make
+apt-get update
+apt-get install -y make
+
+#install gcc
+apt update && apt dist-upgrade -y
+apt install -y build-essential
+
+#install maven
+apt-get update && apt-get upgrade
+apt-get  install -y  maven
+
+#install gradle
+add-apt-repository -y  ppa:cwchien/gradle
+apt-get update
+apt-get install -y gradle
+
 ansible-galaxy install geerlingguy.java
 ansible-galaxy install geerlingguy.jenkins
+ansible-galaxy install geerlingguy.solr
+ansible-galaxy install blackstar257.perl
 
 cd ~
 git clone https://github.com/YevhenVieskov/DevOps_internal_Dnipro_2021Q3.git
@@ -34,5 +53,11 @@ cd ~/DevOps_internal_Dnipro_2021Q3
 cp -r jenkins_config/*     /var/lib/jenkins
 #add jenkins to docker group
 usermod -aG docker jenkins
+
+cp  ~/DevOps_internal_Dnipro_2021Q3/ansible/install_solr.yml ~/.ansible/
+cp  ~/DevOps_internal_Dnipro_2021Q3/ansible/install_perl.yml ~/.ansible/
+
+ansible-playbook ~/.ansible/install_solr.yml
+ansible-playbook ~/.ansible/install_perl.yml
 
 reboot 
