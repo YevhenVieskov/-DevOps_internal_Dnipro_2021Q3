@@ -23,7 +23,7 @@ module "asg" {
                 cd ~
                 git clone https://github.com/YevhenVieskov/DevOps_internal_Dnipro_2021Q3.git
                 cp -r ~/DevOps_internal_Dnipro_2021Q3/ansible/install_docker ~/.ansible/roles
-                cp  ~/DevOps_internal_Dnipro_2021Q3/ansible/install_docker.yml ~/.ansible/
+                cp ~/DevOps_internal_Dnipro_2021Q3/ansible/install_docker.yml ~/.ansible/               
                 ansible-playbook ~/.ansible/install_docker.yml
                 EOF
 
