@@ -13,9 +13,18 @@ module "asg" {
   #user_data       = var.udata_asg != "" ? base64encode(var.udata_asg) : base64encode(file(var.udata_asg))
   user_data       = <<-EOF
                 #!/bin/bash
-                ec2ip=$(curl http://169.254.169.254/latest/meta-data/local-ipv4)
-                echo "<html> <body bgcolor=0FA2B6><center><h1><p><font color=White>$ec2ip</h1><center></body></html>" > index.html
-                nohup busybox httpd -f -p 80 &
+                #ec2ip=$(curl http://169.254.169.254/latest/meta-data/local-ipv4)
+                #echo "<html> <body bgcolor=0FA2B6><center><h1><p><font color=White>$ec2ip</h1><center></body></html>" > index.html
+                #nohup busybox httpd -f -p 80 &
+                apt install -y git
+                apt-add-repository -y ppa:ansible/ansible
+                apt update
+                apt install -y ansible
+                cd ~
+                git clone https://github.com/YevhenVieskov/DevOps_internal_Dnipro_2021Q3.git
+                cp -r ~/DevOps_internal_Dnipro_2021Q3/ansible/install_docker ~/.ansible/roles
+                cp  ~/DevOps_internal_Dnipro_2021Q3/ansible/install_docker.yml ~/.ansible/
+                ansible-playbook ~/.ansible/install_docker.yml
                 EOF
 
   root_block_device = [

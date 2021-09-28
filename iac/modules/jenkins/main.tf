@@ -12,9 +12,31 @@ module "jmaster_instance" {
   vpc_security_group_ids = [module.jenkins_master_sg.security_group_id]       #module.vpc.public_subnets    
   subnet_id              = module.vpcjk.public_subnets[1] 
 
-  user_data              = var.udata_jmaster != "" ? base64encode(var.udata_jmaster) : base64encode(file(var.udata_jmaster))
-  #user_data = var.userdata_file_content != "" ? base64encode(var.userdata_file_content) : 
-  #base64encode(templatefile("${path.module}/bastion-userdata.sh", { HOSTED_ZONE_ID = var.hosted_zone_id, NAME_PREFIX = var.name_prefix }))
+  #user_data              = var.udata_jmaster != "" ? base64encode(var.udata_jmaster) : base64encode(file(var.udata_jmaster))
+
+  user_data       = <<-EOF
+                #!/bin/bash
+                apt install -y git
+                apt-add-repository -y ppa:ansible/ansible
+                apt update
+                apt install -y ansible
+                apt update
+                apt install -y  jq
+                ansible-galaxy install geerlingguy.java
+                ansible-galaxy install geerlingguy.jenkins
+                cd ~
+                git clone https://github.com/YevhenVieskov/DevOps_internal_Dnipro_2021Q3.git
+                cp  ~/DevOps_internal_Dnipro_2021Q3/ansible/install_jenkins.yml ~/.ansible/
+                ansible-playbook ~/.ansible/install_jenkins.yml
+                cp -r ~/DevOps_internal_Dnipro_2021Q3/ansible/install_docker ~/.ansible/roles
+                cp  ~/DevOps_internal_Dnipro_2021Q3/ansible/install_docker.yml ~/.ansible/
+                ansible-playbook ~/.ansible/install_docker.yml
+                usermod -aG docker jenkins
+                cd ~/DevOps_internal_Dnipro_2021Q3
+                cp -r jenkins_config/*     /var/lib/jenkins                
+                reboot 
+                EOF
+  
 
   /*root_block_device {
     volume_type           = "gp2"
@@ -43,7 +65,17 @@ module "jslave_instance" {
   vpc_security_group_ids = [module.jenkins_master_sg.security_group_id]   
   subnet_id              = module.vpcjk.private_subnets[1] 
 
-  user_data              = var.udata_jslave != "" ? base64encode(var.udata_jslave) : base64encode(file(var.udata_jslave)) 
+  #user_data              = var.udata_jslave != "" ? base64encode(var.udata_jslave) : base64encode(file(var.udata_jslave)) 
+
+  user_data       = <<-EOF
+                #!/bin/bash
+                apt install -y git
+                apt-add-repository -y ppa:ansible/ansible
+                apt update
+                apt install -y ansible
+                apt update                
+                ansible-galaxy install geerlingguy.java                
+                EOF
 
   /*root_block_device {
     volume_type           = "gp2"
