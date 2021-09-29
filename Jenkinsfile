@@ -53,7 +53,7 @@ pipeline {
           sh '''
             echo "#---> Create network and security network infrastructure with TF..."
             cd ${WORKSPACE}/$iac            
-            //terraform apply -target aws_route53_zone.main -auto-approve           
+            terraform apply -target aws_route53_zone.main -auto-approve           
             terraform apply -auto-approve
           '''
         }
