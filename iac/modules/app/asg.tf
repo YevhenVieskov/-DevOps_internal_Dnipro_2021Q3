@@ -46,7 +46,7 @@ module "asg" {
   key_name                  = var.ssh_key_name 
   target_group_arns         = module.app_alb.target_group_arns
 
-  health_check_grace_period = 900
+  health_check_grace_period = 1500
 
 
   tags_as_map = {
