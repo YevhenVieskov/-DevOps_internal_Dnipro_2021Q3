@@ -16,12 +16,12 @@ module "jmaster_instance" {
 
   user_data       = <<-EOF
                 #!/bin/bash
-                apt install -y git
-                apt-add-repository -y ppa:ansible/ansible
-                apt update
-                apt install -y ansible
-                apt update
-                apt install -y  jq
+                #apt install -y git
+                sudo apt-add-repository -y ppa:ansible/ansible
+                sudo apt update
+                sudo apt install -y ansible
+                sudo apt update
+                sudo apt install -y  jq
                 ansible-galaxy install geerlingguy.java
                 ansible-galaxy install geerlingguy.jenkins
                 cd ~
@@ -69,11 +69,11 @@ module "jslave_instance" {
 
   user_data       = <<-EOF
                 #!/bin/bash
-                apt install -y git
-                apt-add-repository -y ppa:ansible/ansible
-                apt update
-                apt install -y ansible
-                apt update                
+                #apt install -y git
+                sudo apt-add-repository -y ppa:ansible/ansible
+                sudo apt update
+                sudo apt install -y ansible
+                sudo apt update                
                 ansible-galaxy install geerlingguy.java                
                 EOF
 
